@@ -1,0 +1,38 @@
+2026-09-17 13:22:50,845 - INFO - Analyzing behavior 11: Tricky Behavior - Methods implementing evasion techniques:
+(1) - Icon/label manipulation
+(2) - App hiding mechanisms
+(3) - Settings modification
+(4) - False uninstall messages
+Example: Maikspy error message pattern
+Look for: Package visibility changes, settings modifications, fake error messages.
+2026-09-17 13:22:50,845 - INFO - Searching for Smali files in: 0_Data/Cache/RealisticMalApp/smali_classes2/org/research/realisticmalapp
+2026-09-17 13:22:50,846 - INFO - Found 13 Smali files to analyze
+2026-09-17 13:22:50,846 - INFO - Processing class 1/13: ScenarioRouter$2
+2026-09-17 13:23:07,635 - INFO - Processing class 2/13: ScenarioRouter$1
+2026-09-17 13:23:47,005 - INFO - Found malicious class ScenarioRouter$1 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:23:47,006 - INFO - Processing class 3/13: TelephonyScenario
+2026-09-17 13:23:56,759 - INFO - Processing class 4/13: PrivacyScenario
+2026-09-17 13:24:09,007 - INFO - Processing class 5/13: SyncReceiver
+2026-09-17 13:24:22,047 - INFO - Processing class 6/13: MaintenanceService
+2026-09-17 13:24:53,351 - INFO - Found malicious class MaintenanceService (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:24:53,351 - INFO - Processing class 7/13: ScenarioRouter$3
+2026-09-17 13:25:02,889 - INFO - Processing class 8/13: EscalationScenario
+2026-09-17 13:25:18,094 - INFO - Processing class 9/13: TrickyScenario
+2026-09-17 13:25:55,978 - INFO - Found malicious class TrickyScenario (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:25:55,979 - INFO - Processing class 10/13: ScenarioRouter
+2026-09-17 13:26:08,781 - INFO - Progress: 10 classes out of 13 [76.92%]
+2026-09-17 13:26:08,782 - INFO - Processing class 11/13: EvidenceRecorder
+2026-09-17 13:26:19,109 - INFO - Processing class 12/13: MainActivity
+2026-09-17 13:26:31,495 - INFO - Processing class 13/13: ScenarioRouter$4
+2026-09-17 13:26:57,755 - INFO - Found malicious class ScenarioRouter$4 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:26:57,757 - INFO - Progress: 13 classes out of 13 [100.00%]
+2026-09-17 13:26:58,003 - INFO - 
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 13
+--- 📊 Total Malicious Classes Found: 4
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder-7b-gpu:
+        • Malicious Classes: 4 (30.77%)
+        • Total Tokens: 0
+        • Total Requests: 17

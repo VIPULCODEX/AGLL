@@ -1,0 +1,1715 @@
+{
+  "summary": {
+    "n_candidates": 51,
+    "n_correct": 32,
+    "weights": {
+      "w0": 0.2707554869190045,
+      "w1_c_sc": 0.49579909771902286,
+      "w2_c_sem": -0.2893413409810522,
+      "w3_c_ens": 0.037375678724143074,
+      "w4_c_pa": -0.0017352442847081845
+    },
+    "ece_5bin": 0.01132040948414424,
+    "elkan_sweep": [
+      {
+        "c_fa": 1,
+        "c_fr": 1,
+        "tau": 0.5,
+        "coverage": 1.0,
+        "accuracy_among_accepted": 0.6274509803921569
+      },
+      {
+        "c_fa": 2,
+        "c_fr": 1,
+        "tau": 0.6666666666666666,
+        "coverage": 0.058823529411764705,
+        "accuracy_among_accepted": 1.0
+      },
+      {
+        "c_fa": 5,
+        "c_fr": 1,
+        "tau": 0.8333333333333334,
+        "coverage": 0.0,
+        "accuracy_among_accepted": NaN
+      },
+      {
+        "c_fa": 10,
+        "c_fr": 1,
+        "tau": 0.9090909090909091,
+        "coverage": 0.0,
+        "accuracy_among_accepted": NaN
+      },
+      {
+        "c_fa": 20,
+        "c_fr": 1,
+        "tau": 0.9523809523809523,
+        "coverage": 0.0,
+        "accuracy_among_accepted": NaN
+      }
+    ]
+  },
+  "detail": [
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 1,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 10,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 10\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 2,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "- `invoke-interface {v1}, Landroid/database/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;`  \n- `invoke-interface {v1}, Landroid/database/Cursor;->moveToNext()Z`  \n- `invoke-interface {v1}, Landroid/database/Cursor;->getColumnIndex(Ljava/lang/String;)I`  \n- `invoke-interface {v1}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;`",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 1  \nCONFIDENCE: 95  \nEVIDENCE:  \n- `invoke-interface {v1}, Landroid/database/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;`  \n- `invoke-interface {v1}, Landroid/database/Cursor;->moveToNext()Z`  \n- `invoke-interface {v1}, Landroid/database/Cursor;->getColumnIndex(Ljava/lang/String;)I`  \n- `invoke-interface {v1}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;`"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "- `invoke-interface {v1}, Landroid/database/Cursor;->moveToNext()Z` - Accessing the contact list  \n- `invoke-interface {v1, v3}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;` - Accessing contact details (name)  \n- `invoke-interface {v1, v4}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;` - Accessing contact details (phone number)  \n- `new-instance v2, Lorg/json/JSONArray;` - Creating a JSON array to store contact information  \n- `invoke-virtual {v2, v5}, Lorg/json/JSONArray;->put(Ljava/lang/Object;)Lorg/json/JSONArray;` - Adding contact information to the JSON array  \n- `new-instance v3, Ljava/lang/Thread;` - Creating a new thread to handle contact data processing  \n- `invoke-virtual {v3}, Ljava/lang/Thread;->start()V` - Starting the thread to process contact data",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 1  \nCONFIDENCE: 90  \nEVIDENCE:  \n- `invoke-interface {v1}, Landroid/database/Cursor;->moveToNext()Z` - Accessing the contact list  \n- `invoke-interface {v1, v3}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;` - Accessing contact details (name)  \n- `invoke-interface {v1, v4}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;` - Accessing contact details (phone number)  \n- `new-instance v2, Lorg/json/JSONArray;` - Creating a JSON array to store contact information  \n- `invoke-virtual {v2, v5}, Lorg/json/JSONArray;->put(Ljava/lang/Object;)Lorg/json/JSONArray;` - Adding contact information to the JSON array  \n- `new-instance v3, Ljava/lang/Thread;` - Creating a new thread to handle contact data processing  \n- `invoke-virtual {v3}, Ljava/lang/Thread;->start()V` - Starting the thread to process contact data"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 1.0986,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 3,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment$SendDataToServerTask;->doInBackground([Ljava/lang/String;)Ljava/lang/Integer;",
+      "predicted_malicious": true,
+      "in_gt": false,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "```smali\ninvoke-virtual {v3}, Ljava/net/HttpURLConnection;->getResponseCode()I\n```\nThis line indicates that the method is making an HTTP request and retrieving the response code, which is a common behavior for privacy-stealing malware that exfiltrates user data to a remote server.",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \n```smali\ninvoke-virtual {v3}, Ljava/net/HttpURLConnection;->getResponseCode()I\n```\nThis line indicates that the method is making an HTTP request and retrieving the response code, which is a common behavior for privacy-stealing malware that exfiltrates user data to a remote server."
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "```smali\ninvoke-virtual {v0}, Ljava/lang/String;->getBytes()[B\n...\ninvoke-virtual {v3}, Ljava/net/HttpURLConnection;->getOutputStream()Ljava/io/OutputStream;\n...\ninvoke-virtual {v5, v4}, Ljava/io/OutputStream;->write([B)V\n```",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 1  \nCONFIDENCE: 95  \nEVIDENCE:  \n```smali\ninvoke-virtual {v0}, Ljava/lang/String;->getBytes()[B\n...\ninvoke-virtual {v3}, Ljava/net/HttpURLConnection;->getOutputStream()Ljava/io/OutputStream;\n...\ninvoke-virtual {v5, v4}, Ljava/io/OutputStream;->write([B)V\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 4,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->retrieveLocation()V",
+      "predicted_malicious": true,
+      "in_gt": false,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "\"invoke-static {v0, v1}, Landroidx/core/content/ContextCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I\", \"invoke-virtual {v0}, Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation()Lcom/google/android/gms/tasks/Task;\", \"invoke-virtual {p0, v0, v1}, Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->requestPermissions([Ljava/lang/String;I)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-static {v0, v1}, Landroidx/core/content/ContextCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I\", \"invoke-virtual {v0}, Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation()Lcom/google/android/gms/tasks/Task;\", \"invoke-virtual {p0, v0, v1}, Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->requestPermissions([Ljava/lang/String;I)V\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "\"invoke-virtual {v0}, Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation()Lcom/google/android/gms/tasks/Task;\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0}, Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation()Lcom/google/android/gms/tasks/Task;\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 5,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->toggleAppIcon()V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 80,
+          "evidence": "- \"invoke-virtual {v0, v2, v6, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\" and \"invoke-virtual {v0, v3, v5, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\" - These lines modify the enabled state of components, which could be used for hiding the app or tricking the user.\n- The method name \"toggleAppIcon\" suggests that this method is intended to change the app's visibility or behavior, which is a common form of app evasion.",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 80\nEVIDENCE: \n- \"invoke-virtual {v0, v2, v6, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\" and \"invoke-virtual {v0, v3, v5, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\" - These lines modify the enabled state of components, which could be used for hiding the app or tricking the user.\n- The method name \"toggleAppIcon\" suggests that this method is intended to change the app's visibility or behavior, which is a common form of app evasion."
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 95,
+          "evidence": "```smali\ninvoke-virtual {v0, v2, v6, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\ninvoke-virtual {v0, v3, v5, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```\nThese lines indicate that the method is manipulating the `PackageManager` to enable or disable components (`AliasNormal` and `AliasStealth`), which is an evasion technique.",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 95\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v2, v6, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\ninvoke-virtual {v0, v3, v5, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```\nThese lines indicate that the method is manipulating the `PackageManager` to enable or disable components (`AliasNormal` and `AliasStealth`), which is an evasion technique."
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 6,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 100,
+          "evidence": "\"invoke-virtual {v2}, Ljava/net/HttpURLConnection;->getResponseCode()I\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 100\nEVIDENCE: \"invoke-virtual {v2}, Ljava/net/HttpURLConnection;->getResponseCode()I\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 85,
+          "evidence": "- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->openConnection()Ljava/net/URLConnection;`  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->getResponseCode()I`  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->disconnect()V`  \n- `invoke-virtual {v1}, Ljava/net/HttpURLConnection;->setRequestMethod(Ljava/lang/String;)V`  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V`  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->setDoOutput(Z)V`  \n- `invoke-virtual {v3}, Ljava/io/OutputStream;->write([B)V`",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 1  \nCONFIDENCE: 85  \nEVIDENCE:  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->openConnection()Ljava/net/URLConnection;`  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->getResponseCode()I`  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->disconnect()V`  \n- `invoke-virtual {v1}, Ljava/net/HttpURLConnection;->setRequestMethod(Ljava/lang/String;)V`  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V`  \n- `invoke-virtual {v2}, Ljava/net/HttpURLConnection;->setDoOutput(Z)V`  \n- `invoke-virtual {v3}, Ljava/io/OutputStream;->write([B)V`"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 1.0986,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 7,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 100,
+          "evidence": "\"invoke-virtual {v0, v2, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\" and \"invoke-virtual {v0, v3, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 100\nEVIDENCE: \"invoke-virtual {v0, v2, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\" and \"invoke-virtual {v0, v3, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 100,
+          "evidence": "```smali\ninvoke-virtual {v0, v2, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\ninvoke-virtual {v0, v3, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 11  \nCONFIDENCE: 100  \nEVIDENCE: \n```smali\ninvoke-virtual {v0, v2, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\ninvoke-virtual {v0, v3, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 8,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->onRequestPermissionsResult(I[Ljava/lang/String;[I)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 85,
+          "evidence": "```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 85\nEVIDENCE: \n```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 9,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->onRequestPermissionsResult(I[Ljava/lang/String;[I)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 10,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 80,
+          "evidence": "- `invoke-static {v0}, Landroidx/core/app/ActivityCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I`\n- `invoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V`\nThese lines indicate that the method is checking for and requesting the `READ_CONTACTS` permission, and it is calling a method to fetch and log contacts, which are indicative of privacy stealing behavior.",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 80\nEVIDENCE: \n- `invoke-static {v0}, Landroidx/core/app/ActivityCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I`\n- `invoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V`\nThese lines indicate that the method is checking for and requesting the `READ_CONTACTS` permission, and it is calling a method to fetch and log contacts, which are indicative of privacy stealing behavior."
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "```smali\ninvoke-static {v1}, Landroidx/core/app/ActivityCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-static {v1}, Landroidx/core/app/ActivityCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 11,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment$SendDataToServerTask;->doInBackground([Ljava/lang/Object;)Ljava/lang/Object;",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 12,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment$$ExternalSyntheticLambda0;->run()V",
+      "predicted_malicious": true,
+      "in_gt": false,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "\"invoke-static {v0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-static {v0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "\"invoke-static {v0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-static {v0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 13,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->lambda$onCreateView$0$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment(Landroid/view/View;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 14,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->lambda$onCreateView$1$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment(Landroid/view/View;)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 0.5,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 100,
+          "evidence": "\"invoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 100\nEVIDENCE: \"invoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 15,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment$$ExternalSyntheticLambda0;->onClick(Landroid/view/View;)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 16,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment$$ExternalSyntheticLambda1;->onClick(Landroid/view/View;)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 17,
+      "signature": "Llu/snt/trux/koopaapp/RegistrationActivity$1;->onClick(Landroid/view/View;)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens_unavailable": true,
+      "c_ens_error": "ReadTimeout: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=90)"
+    },
+    {
+      "app": "MalApp_1_9_11",
+      "rank": 18,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 1,
+      "signature": "Lorg/research/syntheticmalloc/MainActivity;->onCreate(Landroid/os/Bundle;)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 3,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioBootstrap;->install()V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 4,
+      "signature": "Lorg/research/syntheticmalloc/SmsScenario;->classifySyntheticEnvelope(Ljava/lang/String;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 20,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 20  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 5,
+      "signature": "Lorg/research/syntheticmalloc/TrickyScenario;->selectDecoyState(Z)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 0.5,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 70,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 11  \nCONFIDENCE: 70  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 20,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 20\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 7,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter;->registerCallbacks()V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 20,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 20  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 9,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$1;->run()V",
+      "predicted_malicious": true,
+      "in_gt": false,
+      "correct": 0,
+      "c_sc": 0.5,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "6",
+          "confidence": 90,
+          "evidence": "\"invoke-virtual {v0, v1}, Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 6\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 11,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$2;->run()V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 20,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 20  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 13,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$3;->run()V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 15,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$4;->run()V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 10,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 10\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 16,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter;->dispatch(Ljava/lang/Runnable;)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 18,
+      "signature": "Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 20,
+      "signature": "Lorg/research/syntheticmalloc/PrivacyScenario;->deriveSyntheticProfile(Ljava/lang/String;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 23,
+      "signature": "Lorg/research/syntheticmalloc/AccessibilityScenario;->emitSimulatedActionPlan(Ljava/lang/String;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 24,
+      "signature": "Lorg/research/syntheticmalloc/EvidenceRecorder;->record(Ljava/lang/String;)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 25,
+      "signature": "Lorg/research/syntheticmalloc/PrivacyScenario;->queueLocalAudit(Ljava/lang/String;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 26,
+      "signature": "Lorg/research/syntheticmalloc/SmsScenario;->retainOnlyFixtureMarker(Ljava/lang/String;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 27,
+      "signature": "Lorg/research/syntheticmalloc/TrickyScenario;->explainState(Ljava/lang/String;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "SyntheticMalApp",
+      "rank": 31,
+      "signature": "Lorg/research/syntheticmalloc/EvidenceRecorder;->snapshot()Ljava/util/List;",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 1,
+      "signature": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 85,
+          "evidence": "```smali\ninvoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getLine1Number()Ljava/lang/String;\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 85\nEVIDENCE: \n```smali\ninvoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getLine1Number()Ljava/lang/String;\n```"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "```\ninvoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getLine1Number()Ljava/lang/String;\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \n```\ninvoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getLine1Number()Ljava/lang/String;\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 2,
+      "signature": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "```smali\ninvoke-interface {v0}, Landroid/database/Cursor;->getCount()I\n```\nThis line indicates that the method is accessing the count of entries in the call log, which is a clear indication of collecting location data, a form of privacy stealing.",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-interface {v0}, Landroid/database/Cursor;->getCount()I\n```\nThis line indicates that the method is accessing the count of entries in the call log, which is a clear indication of collecting location data, a form of privacy stealing."
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "\"invoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \"invoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 3,
+      "signature": "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "\"invoke-static {v0}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-static {v0}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "\"invoke-static {v0}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;\"\n\"invoke-static {v1}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n\"invoke-static {v0}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;\"\n\"invoke-static {v1}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 4,
+      "signature": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "\"invoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\" - Accessing the content resolver to query contacts.\n\"EvidenceRecorder;->record(Ljava/lang/String;)V\" - Exfiltrating user data by recording the count of contacts.",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \"invoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\" - Accessing the content resolver to query contacts.\n\"EvidenceRecorder;->record(Ljava/lang/String;)V\" - Exfiltrating user data by recording the count of contacts."
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "```smali\ninvoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\n```\n```smali\ninvoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;\n```\n```smali\ninvoke-interface {v0}, Landroid/database/Cursor;->getCount()I\n```\n```smali\ninvoke-interface {v0}, Landroid/database/Cursor;->close()V\n```\n```smali\ninvoke-static {v2}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\n```",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 1  \nCONFIDENCE: 90  \nEVIDENCE:  \n```smali\ninvoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\n```\n```smali\ninvoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;\n```\n```smali\ninvoke-interface {v0}, Landroid/database/Cursor;->getCount()I\n```\n```smali\ninvoke-interface {v0}, Landroid/database/Cursor;->close()V\n```\n```smali\ninvoke-static {v2}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 1.0986,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 5,
+      "signature": "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 100,
+          "evidence": "\"invoke-virtual {v0, v1, v2, v3}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 100\nEVIDENCE: \"invoke-virtual {v0, v1, v2, v3}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 100,
+          "evidence": "```smali\ninvoke-virtual {v0, v1, v2, v3}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 100\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v1, v2, v3}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 6,
+      "signature": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "\"invoke-virtual {v0, v1}, Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;\"\n\"invoke-static {v2}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;\"\n\"invoke-static {v2}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "\"invoke-virtual {v0, v1}, Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 7,
+      "signature": "Lorg/research/realisticmalapp/EscalationScenario;->modifyPrivateConfigFile(Landroid/content/Context;)V",
+      "predicted_malicious": false,
+      "in_gt": true,
+      "correct": 0,
+      "c_sc": 0.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "```smali\ninvoke-virtual {p1, v0, v1}, Landroid/content/Context;->openFileOutput(Ljava/lang/String;I)Ljava/io/FileOutputStream;\n```\nThis line indicates that the method is accessing a file on the device, which could be used to exfiltrate sensitive user data.",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {p1, v0, v1}, Landroid/content/Context;->openFileOutput(Ljava/lang/String;I)Ljava/io/FileOutputStream;\n```\nThis line indicates that the method is accessing a file on the device, which could be used to exfiltrate sensitive user data."
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 85,
+          "evidence": "\"const-string v0, \"config.dat\"\\nconst/4 v1, 0x0\\ninvoke-virtual {p1, v0, v1}, Landroid/content/Context;->openFileOutput(Ljava/lang/String;I)Ljava/io/FileOutputStream;\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 85\nEVIDENCE: \"const-string v0, \"config.dat\"\\nconst/4 v1, 0x0\\ninvoke-virtual {p1, v0, v1}, Landroid/content/Context;->openFileOutput(Ljava/lang/String;I)Ljava/io/FileOutputStream;\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 8,
+      "signature": "Lorg/research/realisticmalapp/SyncReceiver;->onReceive(Landroid/content/Context;Landroid/content/Intent;)V",
+      "predicted_malicious": true,
+      "in_gt": false,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "```smali\ninvoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V\ninvoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \n```smali\ninvoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V\ninvoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V\n```"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "\"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V\"\n\"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \n\"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V\"\n\"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 9,
+      "signature": "Lorg/research/realisticmalapp/MaintenanceService;->onStartCommand(Landroid/content/Intent;II)I",
+      "predicted_malicious": true,
+      "in_gt": false,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 80,
+          "evidence": "\"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V\"\n\"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 80\nEVIDENCE: \n\"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V\"\n\"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "11",
+          "confidence": 90,
+          "evidence": "\"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 10,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter$1;->run()V",
+      "predicted_malicious": true,
+      "in_gt": false,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "\"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V\"",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 1  \nCONFIDENCE: 95  \nEVIDENCE: \"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "```\ninvoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```\ninvoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 11,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter$2;->run()V",
+      "predicted_malicious": true,
+      "in_gt": false,
+      "correct": 0,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 95,
+          "evidence": "```\ninvoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \n```\ninvoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V\n```"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 90,
+          "evidence": "```smali\ninvoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V\n```",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V\n```"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 12,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter$4;->run()V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 13,
+      "signature": "Lorg/research/realisticmalapp/MainActivity;->onCreate(Landroid/os/Bundle;)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 14,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter;->registerCallbacks(Landroid/content/Context;)V",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 0.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 60,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 1  \nCONFIDENCE: 60  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "1",
+          "confidence": 85,
+          "evidence": "invoke-direct {v0, p0, p1}, Lorg/research/realisticmalapp/ScenarioRouter$1;-><init>(Lorg/research/realisticmalapp/ScenarioRouter;Landroid/content/Context;)V\ninvoke-direct {v1, p0, p1}, Lorg/research/realisticmalapp/ScenarioRouter$2;-><init>(Lorg/research/realisticmalapp/ScenarioRouter;Landroid/content/Context;)V\ninvoke-direct {v2, p0}, Lorg/research/realisticmalapp/ScenarioRouter$3;-><init>(Lorg/research/realisticmalapp/ScenarioRouter;)V\ninvoke-direct {v3, p0, p1}, Lorg/research/realisticmalapp/ScenarioRouter$4;-><init>(Lorg/research/realisticmalapp/ScenarioRouter;Landroid/content/Context;)V",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 85\nEVIDENCE: \ninvoke-direct {v0, p0, p1}, Lorg/research/realisticmalapp/ScenarioRouter$1;-><init>(Lorg/research/realisticmalapp/ScenarioRouter;Landroid/content/Context;)V\ninvoke-direct {v1, p0, p1}, Lorg/research/realisticmalapp/ScenarioRouter$2;-><init>(Lorg/research/realisticmalapp/ScenarioRouter;Landroid/content/Context;)V\ninvoke-direct {v2, p0}, Lorg/research/realisticmalapp/ScenarioRouter$3;-><init>(Lorg/research/realisticmalapp/ScenarioRouter;)V\ninvoke-direct {v3, p0, p1}, Lorg/research/realisticmalapp/ScenarioRouter$4;-><init>(Lorg/research/realisticmalapp/ScenarioRouter;Landroid/content/Context;)V"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 15,
+      "signature": "Lorg/research/realisticmalapp/MaintenanceService;->onBind(Landroid/content/Intent;)Landroid/os/IBinder;",
+      "predicted_malicious": false,
+      "in_gt": false,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": false,
+          "behavior_id": "none",
+          "confidence": 0,
+          "evidence": "NONE",
+          "raw": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 1.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.0,
+      "h_max": 1.0986
+    },
+    {
+      "app": "RealisticMalApp",
+      "rank": 16,
+      "signature": "Lorg/research/realisticmalapp/EscalationScenario;->probeSystemPaths()V",
+      "predicted_malicious": true,
+      "in_gt": true,
+      "correct": 1,
+      "c_sc": 1.0,
+      "sub_verdicts": [
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "7",
+          "confidence": 85,
+          "evidence": "\"invoke-virtual {v0}, Ljava/io/File;->exists()Z\"",
+          "raw": "IS_MALICIOUS: yes  \nBEHAVIOR_ID: 7  \nCONFIDENCE: 85  \nEVIDENCE: \"invoke-virtual {v0}, Ljava/io/File;->exists()Z\""
+        },
+        {
+          "is_parseable": true,
+          "is_malicious": true,
+          "behavior_id": "7",
+          "confidence": 90,
+          "evidence": "\"invoke-virtual {v0}, Ljava/io/File;->exists()Z\" and \"invoke-static {v1}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\"",
+          "raw": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 7\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0}, Ljava/io/File;->exists()Z\" and \"invoke-static {v1}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\""
+        }
+      ],
+      "c_pa": 1.0,
+      "c_ens": 0.0,
+      "ensemble_verdict": false,
+      "h_sem": 0.6365,
+      "h_max": 1.0986
+    }
+  ]
+}

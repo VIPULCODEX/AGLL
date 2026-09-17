@@ -1,0 +1,44 @@
+2026-09-17 13:07:49,482 - INFO - Analyzing behavior 1: Privacy Stealing - Methods that access or exfiltrate sensitive user data including:
+(1) - Accessing Contact Lists – Retrieving the user's contact details from the device's storage.
+(2) - Reading SMS Messages – Accessing and potentially forwarding SMS messages to external servers.
+(3) - Collecting Location Data – Gathering precise GPS or network-based location information.
+(4) - Extracting Phone Numbers – Accessing the device's phone number or identifiers such as IMEI and IMSI.
+(5) - Harvesting Call Logs – Reading historical data on incoming, outgoing, or missed calls.
+(6) - Intercepting Communications – Monitoring or manipulating SMS or call-based communication.
+(7) - Exfiltrating User Data – Sending private information to external servers or networks.
+Look for: Permission checks, content provider queries, telephony manager access, location services, file operations targeting private directories.
+2026-09-17 13:07:49,482 - INFO - Searching for Smali files in: 0_Data/Cache/RealisticMalApp/smali_classes2/org/research/realisticmalapp
+2026-09-17 13:07:49,483 - INFO - Found 13 Smali files to analyze
+2026-09-17 13:07:49,483 - INFO - Processing class 1/13: ScenarioRouter$2
+2026-09-17 13:09:11,622 - INFO - Found malicious class ScenarioRouter$2 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:09:11,623 - INFO - Processing class 2/13: ScenarioRouter$1
+2026-09-17 13:09:57,579 - INFO - Found malicious class ScenarioRouter$1 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:09:57,579 - INFO - Processing class 3/13: TelephonyScenario
+2026-09-17 13:10:43,846 - INFO - Found malicious class TelephonyScenario (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:10:43,846 - INFO - Processing class 4/13: PrivacyScenario
+2026-09-17 13:11:21,440 - INFO - Found malicious class PrivacyScenario (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:11:21,441 - INFO - Processing class 5/13: SyncReceiver
+2026-09-17 13:11:48,598 - INFO - Found malicious class SyncReceiver (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:11:48,598 - INFO - Processing class 6/13: MaintenanceService
+2026-09-17 13:12:47,066 - INFO - Found malicious class MaintenanceService (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:12:47,066 - INFO - Processing class 7/13: ScenarioRouter$3
+2026-09-17 13:13:05,999 - INFO - Processing class 8/13: EscalationScenario
+2026-09-17 13:13:24,199 - INFO - Processing class 9/13: TrickyScenario
+2026-09-17 13:13:46,693 - INFO - Processing class 10/13: ScenarioRouter
+2026-09-17 13:14:22,304 - INFO - Found malicious class ScenarioRouter (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:14:22,304 - INFO - Progress: 10 classes out of 13 [76.92%]
+2026-09-17 13:14:22,305 - INFO - Processing class 11/13: EvidenceRecorder
+2026-09-17 13:14:34,827 - INFO - Processing class 12/13: MainActivity
+2026-09-17 13:14:48,732 - INFO - Processing class 13/13: ScenarioRouter$4
+2026-09-17 13:15:16,376 - INFO - Found malicious class ScenarioRouter$4 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-17 13:15:16,376 - INFO - Progress: 13 classes out of 13 [100.00%]
+2026-09-17 13:15:16,605 - INFO - 
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 13
+--- 📊 Total Malicious Classes Found: 8
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder-7b-gpu:
+        • Malicious Classes: 8 (61.54%)
+        • Total Tokens: 0
+        • Total Requests: 21

@@ -1,0 +1,10 @@
+
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 13
+--- 📊 Total Malicious Classes Found: 4
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder-7b-gpu:
+        • Malicious Classes: 4 (30.77%)
+        • Total Tokens: 0
+        • Total Requests: 17

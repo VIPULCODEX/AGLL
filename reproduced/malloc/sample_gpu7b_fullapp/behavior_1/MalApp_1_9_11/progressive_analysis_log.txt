@@ -1,0 +1,141 @@
+2026-09-07 13:05:20,374 - INFO - Analyzing behavior 1: Privacy Stealing - Methods that access or exfiltrate sensitive user data including:
+(1) - Accessing Contact Lists – Retrieving the user's contact details from the device's storage.
+(2) - Reading SMS Messages – Accessing and potentially forwarding SMS messages to external servers.
+(3) - Collecting Location Data – Gathering precise GPS or network-based location information.
+(4) - Extracting Phone Numbers – Accessing the device's phone number or identifiers such as IMEI and IMSI.
+(5) - Harvesting Call Logs – Reading historical data on incoming, outgoing, or missed calls.
+(6) - Intercepting Communications – Monitoring or manipulating SMS or call-based communication.
+(7) - Exfiltrating User Data – Sending private information to external servers or networks.
+Look for: Permission checks, content provider queries, telephony manager access, location services, file operations targeting private directories.
+2026-09-07 13:05:20,374 - INFO - Searching for Smali files in: 0_Data/Cache/MalApp_1_9_11/smali_classes2/lu/snt/trux/koopaapp
+2026-09-07 13:05:20,374 - INFO - Searching for Smali files in: 0_Data/Cache/MalApp_1_9_11/smali_classes3/lu/snt/trux/koopaapp
+2026-09-07 13:05:20,375 - INFO - Searching for Smali files in: 0_Data/Cache/MalApp_1_9_11/smali_classes4/lu/snt/trux/koopaapp
+2026-09-07 13:05:20,375 - INFO - Searching for Smali files in: 0_Data/Cache/MalApp_1_9_11/smali_classes5/lu/snt/trux/koopaapp
+2026-09-07 13:05:20,375 - INFO - Searching for Smali files in: 0_Data/Cache/MalApp_1_9_11/smali_classes6/lu/snt/trux/koopaapp
+2026-09-07 13:05:20,375 - INFO - Found 99 Smali files to analyze
+2026-09-07 13:05:20,375 - INFO - Processing class 1/99: R$array
+2026-09-07 13:05:39,678 - INFO - Processing class 2/99: R$drawable
+2026-09-07 13:05:44,688 - INFO - Processing class 3/99: R$xml
+2026-09-07 13:05:49,139 - INFO - Processing class 4/99: R$style
+2026-09-07 13:05:53,945 - INFO - Processing class 5/99: R$navigation
+2026-09-07 13:05:58,104 - INFO - Processing class 6/99: R$id
+2026-09-07 13:06:06,855 - INFO - Processing class 7/99: R$mipmap
+2026-09-07 13:06:13,661 - INFO - Processing class 8/99: R$dimen
+2026-09-07 13:06:19,023 - INFO - Processing class 9/99: R$layout
+2026-09-07 13:06:25,448 - INFO - Processing class 10/99: R
+2026-09-07 13:06:31,020 - INFO - Progress: 10 classes out of 99 [10.10%]
+2026-09-07 13:06:31,020 - INFO - Processing class 11/99: R$color
+2026-09-07 13:06:57,123 - INFO - Processing class 12/99: R$menu
+2026-09-07 13:07:04,949 - INFO - Processing class 13/99: R$string
+2026-09-07 13:07:10,488 - INFO - Processing class 14/99: NavHeaderHomeBinding
+2026-09-07 13:07:19,223 - INFO - Processing class 15/99: DialogDeleteAccountBinding
+2026-09-07 13:07:27,847 - INFO - Processing class 16/99: FragmentMyAccountBinding
+2026-09-07 13:07:36,941 - INFO - Processing class 17/99: FragmentRequestData3Binding
+2026-09-07 13:07:49,022 - INFO - Processing class 18/99: CardTrainingBinding
+2026-09-07 13:07:59,021 - INFO - Processing class 19/99: HomeContentBinding
+2026-09-07 13:08:05,338 - INFO - Processing class 20/99: DialogChangePasswordBinding
+2026-09-07 13:08:12,937 - INFO - Progress: 20 classes out of 99 [20.20%]
+2026-09-07 13:08:12,938 - INFO - Processing class 21/99: DialogChangeEmailBinding
+2026-09-07 13:08:22,457 - INFO - Processing class 22/99: FragmentRequestData2Binding
+2026-09-07 13:08:33,113 - INFO - Processing class 23/99: FragmentRequestData1Binding
+2026-09-07 13:08:44,580 - INFO - Processing class 24/99: DialogEditPersonalInfoBinding
+2026-09-07 13:08:52,537 - INFO - Processing class 25/99: DialogEditFitnessProfileBinding
+2026-09-07 13:08:59,408 - INFO - Processing class 26/99: FragmentTrainingBinding
+2026-09-07 13:09:08,094 - INFO - Processing class 27/99: ActivityRegistrationBinding
+2026-09-07 13:09:16,545 - INFO - Processing class 28/99: ActivityMainBinding
+2026-09-07 13:09:29,128 - INFO - Processing class 29/99: FragmentHomeBinding
+2026-09-07 13:09:36,199 - INFO - Processing class 30/99: DialogResetPasswordBinding
+2026-09-07 13:09:44,904 - INFO - Progress: 30 classes out of 99 [30.30%]
+2026-09-07 13:09:44,904 - INFO - Processing class 31/99: ActivityHomeBinding
+2026-09-07 13:09:53,948 - INFO - Processing class 32/99: HomeAppBarBinding
+2026-09-07 13:10:02,291 - INFO - Processing class 33/99: Training
+2026-09-07 13:10:13,291 - INFO - Processing class 34/99: User
+2026-09-07 13:10:22,319 - INFO - Processing class 35/99: MainActivity$2
+2026-09-07 13:10:28,051 - INFO - Processing class 36/99: MainActivity$1
+2026-09-07 13:10:35,719 - INFO - Processing class 37/99: MainActivity$3$1
+2026-09-07 13:10:42,218 - INFO - Processing class 38/99: RegistrationActivity$1$1
+2026-09-07 13:10:52,423 - INFO - Processing class 39/99: MainActivity$3
+2026-09-07 13:11:01,674 - INFO - Processing class 40/99: MainActivity$3$2
+2026-09-07 13:11:08,677 - INFO - Progress: 40 classes out of 99 [40.40%]
+2026-09-07 13:11:08,678 - INFO - Processing class 41/99: RegistrationActivity
+2026-09-07 13:11:19,623 - INFO - Processing class 42/99: MainActivity$3$1$1
+2026-09-07 13:11:27,568 - INFO - Processing class 43/99: HomeActivity$$ExternalSyntheticLambda0
+2026-09-07 13:11:32,731 - INFO - Processing class 44/99: MainActivity
+2026-09-07 13:11:40,038 - INFO - Processing class 45/99: RegistrationActivity$$ExternalSyntheticLambda0
+2026-09-07 13:11:46,497 - INFO - Processing class 46/99: HomeActivity
+2026-09-07 13:11:57,568 - INFO - Processing class 47/99: RegistrationActivity$1
+2026-09-07 13:12:07,999 - INFO - Processing class 48/99: MainActivity$1$1
+2026-09-07 13:12:16,358 - INFO - Processing class 49/99: RequestData3Fragment
+2026-09-07 13:12:26,515 - INFO - Processing class 50/99: MyAccountFragment$1
+2026-09-07 13:12:52,914 - INFO - Found malicious class MyAccountFragment$1 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-07 13:12:52,915 - INFO - Progress: 50 classes out of 99 [50.51%]
+2026-09-07 13:12:52,915 - INFO - Processing class 51/99: MyAccountFragment$3$1
+2026-09-07 13:13:02,819 - INFO - Processing class 52/99: TrainingFragment
+2026-09-07 13:13:31,898 - INFO - Found malicious class TrainingFragment (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-07 13:13:31,899 - INFO - Processing class 53/99: MyAccountFragment$5
+2026-09-07 13:13:41,737 - INFO - Processing class 54/99: MyAccountFragment$3$2
+2026-09-07 13:13:47,211 - INFO - Processing class 55/99: TrainingFragment$1
+2026-09-07 13:13:54,892 - INFO - Processing class 56/99: RequestData1Fragment
+2026-09-07 13:14:32,180 - INFO - Found malicious class RequestData1Fragment (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-07 13:14:32,181 - INFO - Processing class 57/99: MyAccountFragment$6$1
+2026-09-07 13:14:38,766 - INFO - Processing class 58/99: TrainingFragment$3
+2026-09-07 13:14:46,847 - INFO - Processing class 59/99: MyAccountFragment$4$1
+2026-09-07 13:14:56,928 - INFO - Processing class 60/99: MyAccountFragment$2
+2026-09-07 13:15:05,011 - INFO - Progress: 60 classes out of 99 [60.61%]
+2026-09-07 13:15:05,012 - INFO - Processing class 61/99: MyAccountFragment$3$1$1
+2026-09-07 13:15:13,836 - INFO - Processing class 62/99: MyAccountFragment$3
+2026-09-07 13:15:21,576 - INFO - Processing class 63/99: HomeFragment$2$2
+2026-09-07 13:15:29,823 - INFO - Processing class 64/99: RequestData2Fragment$$ExternalSyntheticLambda2
+2026-09-07 13:15:37,664 - INFO - Processing class 65/99: RequestData2Fragment$$ExternalSyntheticLambda3
+2026-09-07 13:15:45,462 - INFO - Processing class 66/99: MyAccountFragment$5$2
+2026-09-07 13:15:51,696 - INFO - Processing class 67/99: MyAccountFragment$4$1$1
+2026-09-07 13:15:59,733 - INFO - Processing class 68/99: MyAccountFragment$5$1$1$1
+2026-09-07 13:16:11,047 - INFO - Processing class 69/99: TrainingFragment$1$$ExternalSyntheticLambda0
+2026-09-07 13:16:18,328 - INFO - Processing class 70/99: RequestData3Fragment$$ExternalSyntheticLambda1
+2026-09-07 13:16:27,081 - INFO - Progress: 70 classes out of 99 [70.71%]
+2026-09-07 13:16:27,081 - INFO - Processing class 71/99: RequestData3Fragment$$ExternalSyntheticLambda0
+2026-09-07 13:16:33,495 - INFO - Processing class 72/99: MyAccountFragment$5$1$1
+2026-09-07 13:16:41,847 - INFO - Processing class 73/99: MyAccountFragment$3$1$1$1$1
+2026-09-07 13:16:49,295 - INFO - Processing class 74/99: MyAccountFragment$6$2
+2026-09-07 13:16:57,097 - INFO - Processing class 75/99: MyAccountFragment$5$1
+2026-09-07 13:17:06,435 - INFO - Processing class 76/99: MyAccountFragment$4$1$1$1
+2026-09-07 13:17:14,843 - INFO - Processing class 77/99: TrainingFragment$$ExternalSyntheticLambda1
+2026-09-07 13:17:33,166 - INFO - Found malicious class TrainingFragment$$ExternalSyntheticLambda1 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-07 13:17:33,167 - INFO - Processing class 78/99: TrainingFragment$SendDataToServerTask
+2026-09-07 13:17:41,828 - INFO - Processing class 79/99: TrainingFragment$$ExternalSyntheticLambda0
+2026-09-07 13:17:50,260 - INFO - Processing class 80/99: MyAccountFragment
+2026-09-07 13:18:01,160 - INFO - Progress: 80 classes out of 99 [80.81%]
+2026-09-07 13:18:01,161 - INFO - Processing class 81/99: MyAccountFragment$6$2$1
+2026-09-07 13:18:11,122 - INFO - Processing class 82/99: HomeFragment$TrainingAdapter$ViewHolder
+2026-09-07 13:18:19,191 - INFO - Processing class 83/99: HomeFragment$3
+2026-09-07 13:18:25,008 - INFO - Processing class 84/99: HomeFragment
+2026-09-07 13:18:35,289 - INFO - Processing class 85/99: MyAccountFragment$4$2
+2026-09-07 13:18:40,423 - INFO - Processing class 86/99: MyAccountFragment$6
+2026-09-07 13:18:50,108 - INFO - Processing class 87/99: TrainingFragment$1$$ExternalSyntheticLambda1
+2026-09-07 13:18:57,533 - INFO - Processing class 88/99: RequestData2Fragment$$ExternalSyntheticLambda0
+2026-09-07 13:19:03,828 - INFO - Processing class 89/99: MyAccountFragment$4
+2026-09-07 13:19:09,873 - INFO - Processing class 90/99: HomeFragment$2$2$1
+2026-09-07 13:19:18,485 - INFO - Progress: 90 classes out of 99 [90.91%]
+2026-09-07 13:19:18,486 - INFO - Processing class 91/99: HomeFragment$1
+2026-09-07 13:19:28,929 - INFO - Processing class 92/99: TrainingFragment$2
+2026-09-07 13:20:08,533 - INFO - Found malicious class TrainingFragment$2 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-07 13:20:08,533 - INFO - Processing class 93/99: RequestData2Fragment
+2026-09-07 13:20:48,712 - INFO - Found malicious class RequestData2Fragment (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-07 13:20:48,712 - INFO - Processing class 94/99: HomeFragment$2$1
+2026-09-07 13:20:55,151 - INFO - Processing class 95/99: HomeFragment$2
+2026-09-07 13:21:03,505 - INFO - Processing class 96/99: RequestData2Fragment$$ExternalSyntheticLambda1
+2026-09-07 13:21:11,516 - INFO - Processing class 97/99: RequestData1Fragment$$ExternalSyntheticLambda0
+2026-09-07 13:21:26,377 - INFO - Found malicious class RequestData1Fragment$$ExternalSyntheticLambda0 (Detected by: qwen2.5-coder-7b-gpu)
+2026-09-07 13:21:26,377 - INFO - Processing class 98/99: HomeFragment$TrainingAdapter
+2026-09-07 13:21:38,007 - INFO - Processing class 99/99: MyAccountFragment$3$1$1$1
+2026-09-07 13:21:49,043 - INFO - Progress: 99 classes out of 99 [100.00%]
+2026-09-07 13:21:50,506 - INFO - 
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 99
+--- 📊 Total Malicious Classes Found: 7
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder-7b-gpu:
+        • Malicious Classes: 7 (7.07%)
+        • Total Tokens: 0
+        • Total Requests: 106

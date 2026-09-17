@@ -1,0 +1,515 @@
+{
+  "summary": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "top_pct": 1.0,
+    "n_candidates": 32,
+    "gt_total": 8,
+    "tp": 0,
+    "fp": 1,
+    "fn": 8,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "parse_errors": 0,
+    "fn_list": [
+      "Lorg/research/syntheticmalloc/SmsScenario;->classifySyntheticEnvelope(Ljava/lang/String;)V",
+      "Lorg/research/syntheticmalloc/TrickyScenario;->selectDecoyState(Z)V",
+      "Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V",
+      "Lorg/research/syntheticmalloc/PrivacyScenario;->deriveSyntheticProfile(Ljava/lang/String;)V",
+      "Lorg/research/syntheticmalloc/AccessibilityScenario;->emitSimulatedActionPlan(Ljava/lang/String;)V",
+      "Lorg/research/syntheticmalloc/PrivacyScenario;->queueLocalAudit(Ljava/lang/String;)V",
+      "Lorg/research/syntheticmalloc/SmsScenario;->retainOnlyFixtureMarker(Ljava/lang/String;)V",
+      "Lorg/research/syntheticmalloc/TrickyScenario;->explainState(Ljava/lang/String;)V"
+    ],
+    "predicted_malicious": [
+      {
+        "rank": 9,
+        "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$1;->run()V",
+        "classname": "Lorg/research/syntheticmalloc/ScenarioRouter$1;",
+        "methodname": "run",
+        "descriptor": "()V",
+        "in_gt": false,
+        "verdict": "malicious",
+        "pred_behavior_id": "6",
+        "confidence": 90,
+        "evidence": "\"invoke-virtual {v0, v1}, Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V\"",
+        "grounding": {
+          "cited_refs": [
+            "Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel"
+          ],
+          "grounded_refs": [
+            "Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 6\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V\""
+      }
+    ]
+  },
+  "per_candidate": [
+    {
+      "rank": 1,
+      "signature": "Lorg/research/syntheticmalloc/MainActivity;->onCreate(Landroid/os/Bundle;)V",
+      "classname": "Lorg/research/syntheticmalloc/MainActivity;",
+      "methodname": "onCreate",
+      "descriptor": "(Landroid/os/Bundle;)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 2,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioBootstrap;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 3,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioBootstrap;->install()V",
+      "classname": "Lorg/research/syntheticmalloc/ScenarioBootstrap;",
+      "methodname": "install",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 4,
+      "signature": "Lorg/research/syntheticmalloc/SmsScenario;->classifySyntheticEnvelope(Ljava/lang/String;)V",
+      "classname": "Lorg/research/syntheticmalloc/SmsScenario;",
+      "methodname": "classifySyntheticEnvelope",
+      "descriptor": "(Ljava/lang/String;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 5,
+      "signature": "Lorg/research/syntheticmalloc/TrickyScenario;->selectDecoyState(Z)V",
+      "classname": "Lorg/research/syntheticmalloc/TrickyScenario;",
+      "methodname": "selectDecoyState",
+      "descriptor": "(Z)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 6,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 7,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter;->registerCallbacks()V",
+      "classname": "Lorg/research/syntheticmalloc/ScenarioRouter;",
+      "methodname": "registerCallbacks",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 8,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$1;-><init>(Lorg/research/syntheticmalloc/ScenarioRouter;)V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 9,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$1;->run()V",
+      "classname": "Lorg/research/syntheticmalloc/ScenarioRouter$1;",
+      "methodname": "run",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "malicious",
+      "pred_behavior_id": "6",
+      "confidence": 90,
+      "evidence": "\"invoke-virtual {v0, v1}, Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V\"",
+      "grounding": {
+        "cited_refs": [
+          "Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel"
+        ],
+        "grounded_refs": [
+          "Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 6\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V\""
+    },
+    {
+      "rank": 10,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$2;-><init>(Lorg/research/syntheticmalloc/ScenarioRouter;)V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 11,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$2;->run()V",
+      "classname": "Lorg/research/syntheticmalloc/ScenarioRouter$2;",
+      "methodname": "run",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 12,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$3;-><init>(Lorg/research/syntheticmalloc/ScenarioRouter;)V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 13,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$3;->run()V",
+      "classname": "Lorg/research/syntheticmalloc/ScenarioRouter$3;",
+      "methodname": "run",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 14,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$4;-><init>(Lorg/research/syntheticmalloc/ScenarioRouter;)V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 15,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter$4;->run()V",
+      "classname": "Lorg/research/syntheticmalloc/ScenarioRouter$4;",
+      "methodname": "run",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 16,
+      "signature": "Lorg/research/syntheticmalloc/ScenarioRouter;->dispatch(Ljava/lang/Runnable;)V",
+      "classname": "Lorg/research/syntheticmalloc/ScenarioRouter;",
+      "methodname": "dispatch",
+      "descriptor": "(Ljava/lang/Runnable;)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 17,
+      "signature": "Lorg/research/syntheticmalloc/AccessibilityScenario;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 18,
+      "signature": "Lorg/research/syntheticmalloc/AccessibilityScenario;->stageUiModel(Ljava/lang/String;)V",
+      "classname": "Lorg/research/syntheticmalloc/AccessibilityScenario;",
+      "methodname": "stageUiModel",
+      "descriptor": "(Ljava/lang/String;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 19,
+      "signature": "Lorg/research/syntheticmalloc/PrivacyScenario;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 20,
+      "signature": "Lorg/research/syntheticmalloc/PrivacyScenario;->deriveSyntheticProfile(Ljava/lang/String;)V",
+      "classname": "Lorg/research/syntheticmalloc/PrivacyScenario;",
+      "methodname": "deriveSyntheticProfile",
+      "descriptor": "(Ljava/lang/String;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 21,
+      "signature": "Lorg/research/syntheticmalloc/SmsScenario;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 22,
+      "signature": "Lorg/research/syntheticmalloc/TrickyScenario;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 23,
+      "signature": "Lorg/research/syntheticmalloc/AccessibilityScenario;->emitSimulatedActionPlan(Ljava/lang/String;)V",
+      "classname": "Lorg/research/syntheticmalloc/AccessibilityScenario;",
+      "methodname": "emitSimulatedActionPlan",
+      "descriptor": "(Ljava/lang/String;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 24,
+      "signature": "Lorg/research/syntheticmalloc/EvidenceRecorder;->record(Ljava/lang/String;)V",
+      "classname": "Lorg/research/syntheticmalloc/EvidenceRecorder;",
+      "methodname": "record",
+      "descriptor": "(Ljava/lang/String;)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 25,
+      "signature": "Lorg/research/syntheticmalloc/PrivacyScenario;->queueLocalAudit(Ljava/lang/String;)V",
+      "classname": "Lorg/research/syntheticmalloc/PrivacyScenario;",
+      "methodname": "queueLocalAudit",
+      "descriptor": "(Ljava/lang/String;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 26,
+      "signature": "Lorg/research/syntheticmalloc/SmsScenario;->retainOnlyFixtureMarker(Ljava/lang/String;)V",
+      "classname": "Lorg/research/syntheticmalloc/SmsScenario;",
+      "methodname": "retainOnlyFixtureMarker",
+      "descriptor": "(Ljava/lang/String;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 27,
+      "signature": "Lorg/research/syntheticmalloc/TrickyScenario;->explainState(Ljava/lang/String;)V",
+      "classname": "Lorg/research/syntheticmalloc/TrickyScenario;",
+      "methodname": "explainState",
+      "descriptor": "(Ljava/lang/String;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 28,
+      "signature": "Lorg/research/syntheticmalloc/R;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 29,
+      "signature": "Lorg/research/syntheticmalloc/EvidenceRecorder;-><clinit>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 30,
+      "signature": "Lorg/research/syntheticmalloc/EvidenceRecorder;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 31,
+      "signature": "Lorg/research/syntheticmalloc/EvidenceRecorder;->snapshot()Ljava/util/List;",
+      "classname": "Lorg/research/syntheticmalloc/EvidenceRecorder;",
+      "methodname": "snapshot",
+      "descriptor": "()Ljava/util/List;",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 32,
+      "signature": "Lorg/research/syntheticmalloc/MainActivity;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    }
+  ]
+}

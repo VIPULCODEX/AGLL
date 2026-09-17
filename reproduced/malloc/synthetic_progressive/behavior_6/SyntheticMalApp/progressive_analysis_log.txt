@@ -1,0 +1,37 @@
+2026-09-15 12:49:22,100 - INFO - Analyzing behavior 6: Accessibility Abuse - Methods exploiting accessibility services:
+(1) - Accessibility service registration
+(2) - Screen content monitoring
+(3) - Automated UI interaction
+(4) - Silent installation attempts
+Example: TOASTAMIGO patterns
+Look for: Accessibility service declarations, window content observers, automated click events.
+2026-09-15 12:49:22,100 - INFO - Searching for Smali files in: 0_Data/Cache/SyntheticMalApp/smali/org/research/syntheticmalloc
+2026-09-15 12:49:22,100 - INFO - Searching for Smali files in: 0_Data/Cache/SyntheticMalApp/smali_classes2/org/research/syntheticmalloc
+2026-09-15 12:49:22,100 - INFO - Found 13 Smali files to analyze
+2026-09-15 12:49:22,100 - INFO - Processing class 1/13: R
+2026-09-15 12:49:28,118 - INFO - Processing class 2/13: ScenarioRouter$2
+2026-09-15 12:49:35,872 - INFO - Processing class 3/13: ScenarioRouter$1
+2026-09-15 12:49:57,511 - INFO - Found malicious class ScenarioRouter$1 (Detected by: qwen2.5-coder:7b-instruct-q4_K_M)
+2026-09-15 12:49:57,512 - INFO - Processing class 4/13: SmsScenario
+2026-09-15 12:50:04,076 - INFO - Processing class 5/13: PrivacyScenario
+2026-09-15 12:50:09,064 - INFO - Processing class 6/13: ScenarioRouter$3
+2026-09-15 12:50:15,594 - INFO - Processing class 7/13: AccessibilityScenario
+2026-09-15 12:50:28,205 - INFO - Processing class 8/13: ScenarioBootstrap
+2026-09-15 12:50:33,634 - INFO - Processing class 9/13: TrickyScenario
+2026-09-15 12:50:39,576 - INFO - Processing class 10/13: ScenarioRouter
+2026-09-15 12:50:48,707 - INFO - Progress: 10 classes out of 13 [76.92%]
+2026-09-15 12:50:48,707 - INFO - Processing class 11/13: EvidenceRecorder
+2026-09-15 12:50:55,661 - INFO - Processing class 12/13: MainActivity
+2026-09-15 12:51:18,596 - INFO - Found malicious class MainActivity (Detected by: qwen2.5-coder:7b-instruct-q4_K_M)
+2026-09-15 12:51:18,596 - INFO - Processing class 13/13: ScenarioRouter$4
+2026-09-15 12:51:24,715 - INFO - Progress: 13 classes out of 13 [100.00%]
+2026-09-15 12:51:24,883 - INFO - 
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 13
+--- 📊 Total Malicious Classes Found: 2
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder:7b-instruct-q4_K_M:
+        • Malicious Classes: 2 (15.38%)
+        • Total Tokens: 0
+        • Total Requests: 15

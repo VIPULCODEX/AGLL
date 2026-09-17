@@ -1,0 +1,10 @@
+
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 13
+--- 📊 Total Malicious Classes Found: 1
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder:7b-instruct-q4_K_M:
+        • Malicious Classes: 1 (7.69%)
+        • Total Tokens: 0
+        • Total Requests: 14

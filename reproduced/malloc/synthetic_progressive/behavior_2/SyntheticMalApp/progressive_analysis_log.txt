@@ -1,0 +1,38 @@
+2026-09-15 12:46:51,551 - INFO - Analyzing behavior 2: SMS/CALL Abuse - Methods that manipulate SMS and phone call functionality:
+(1) - Sending SMS messages without user consent
+(2) - Intercepting/blocking incoming SMS (especially 2FA messages)
+(3) - Deleting SMS messages (to hide evidence)
+(4) - Making calls without user awareness
+(5) - Monitoring call logs
+Look for: SMS manager operations, broadcast receivers for SMS/calls, telephony API usage, SMS deletion commands.
+2026-09-15 12:46:51,552 - INFO - Searching for Smali files in: 0_Data/Cache/SyntheticMalApp/smali/org/research/syntheticmalloc
+2026-09-15 12:46:51,552 - INFO - Searching for Smali files in: 0_Data/Cache/SyntheticMalApp/smali_classes2/org/research/syntheticmalloc
+2026-09-15 12:46:51,552 - INFO - Found 13 Smali files to analyze
+2026-09-15 12:46:51,553 - INFO - Processing class 1/13: R
+2026-09-15 12:46:58,034 - INFO - Processing class 2/13: ScenarioRouter$2
+2026-09-15 12:47:17,549 - INFO - Found malicious class ScenarioRouter$2 (Detected by: qwen2.5-coder:7b-instruct-q4_K_M)
+2026-09-15 12:47:17,550 - INFO - Processing class 3/13: ScenarioRouter$1
+2026-09-15 12:47:26,550 - INFO - Processing class 4/13: SmsScenario
+2026-09-15 12:47:33,741 - INFO - Processing class 5/13: PrivacyScenario
+2026-09-15 12:47:43,035 - INFO - Processing class 6/13: ScenarioRouter$3
+2026-09-15 12:47:50,636 - INFO - Processing class 7/13: AccessibilityScenario
+2026-09-15 12:47:59,402 - INFO - Processing class 8/13: ScenarioBootstrap
+2026-09-15 12:48:05,799 - INFO - Processing class 9/13: TrickyScenario
+2026-09-15 12:48:15,570 - INFO - Processing class 10/13: ScenarioRouter
+2026-09-15 12:48:26,631 - INFO - Progress: 10 classes out of 13 [76.92%]
+2026-09-15 12:48:26,631 - INFO - Processing class 11/13: EvidenceRecorder
+2026-09-15 12:48:34,969 - INFO - Processing class 12/13: MainActivity
+2026-09-15 12:48:54,687 - INFO - Found malicious class MainActivity (Detected by: qwen2.5-coder:7b-instruct-q4_K_M)
+2026-09-15 12:48:54,688 - INFO - Processing class 13/13: ScenarioRouter$4
+2026-09-15 12:49:21,921 - INFO - Found malicious class ScenarioRouter$4 (Detected by: qwen2.5-coder:7b-instruct-q4_K_M)
+2026-09-15 12:49:21,921 - INFO - Progress: 13 classes out of 13 [100.00%]
+2026-09-15 12:49:22,089 - INFO - 
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 13
+--- 📊 Total Malicious Classes Found: 3
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder:7b-instruct-q4_K_M:
+        • Malicious Classes: 3 (23.08%)
+        • Total Tokens: 0
+        • Total Requests: 16

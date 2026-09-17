@@ -1,0 +1,16 @@
+This folder contains result artifacts (JSON, xlsx, log files) produced by
+running the MalLoc and RAML baseline systems on this project's own test
+applications. It does not contain MalLoc's or RAML's source code.
+
+The MIT LICENSE at the root of this repository covers AGLL's own code and
+these generated result files. It does not extend to, and makes no claim
+over, MalLoc or RAML themselves, which are separate third-party research
+artifacts:
+
+  MalLoc: https://github.com/Trustworthy-Software/MalLoc
+  RAML:   https://github.com/Trustworthy-Software/RAML
+
+Neither upstream repository ships an explicit license file as of this
+writing. Obtain MalLoc's and RAML's own code directly from their
+repositories above under whatever terms their authors provide, rather than
+from this repository.

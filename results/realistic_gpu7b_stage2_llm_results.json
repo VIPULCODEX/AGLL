@@ -1,0 +1,692 @@
+{
+  "summary": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "top_pct": 0.5,
+    "n_candidates": 18,
+    "gt_total": 8,
+    "tp": 7,
+    "fp": 4,
+    "fn": 1,
+    "precision": 0.6364,
+    "recall": 0.875,
+    "f1": 0.7368,
+    "parse_errors": 0,
+    "fn_list": [
+      "Lorg/research/realisticmalapp/EscalationScenario;->modifyPrivateConfigFile(Landroid/content/Context;)V"
+    ],
+    "predicted_malicious": [
+      {
+        "rank": 1,
+        "signature": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V",
+        "classname": "Lorg/research/realisticmalapp/TelephonyScenario;",
+        "methodname": "harvestPhoneIdentifiers",
+        "descriptor": "(Landroid/content/Context;)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "\"invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getLine1Number()Ljava/lang/String;\"",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/telephony/TelephonyManager;->getLine1Number"
+          ],
+          "grounded_refs": [
+            "Landroid/telephony/TelephonyManager;->getLine1Number"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getLine1Number()Ljava/lang/String;\""
+      },
+      {
+        "rank": 2,
+        "signature": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V",
+        "classname": "Lorg/research/realisticmalapp/TelephonyScenario;",
+        "methodname": "harvestCallLogSnapshot",
+        "descriptor": "(Landroid/content/Context;)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;\n```\nThis method accesses the call log by querying the `CallLog.Calls.CONTENT_URI`, which is a sensitive API call related to privacy and user data.",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/content/ContentResolver;->query"
+          ],
+          "grounded_refs": [
+            "Landroid/content/ContentResolver;->query"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Lja"
+      },
+      {
+        "rank": 3,
+        "signature": "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V",
+        "classname": "Lorg/research/realisticmalapp/TrickyScenario;",
+        "methodname": "readDeviceAndroidId",
+        "descriptor": "(Landroid/content/Context;)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "\"invoke-static {v0}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;\"",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/provider/Settings$Secure;->getString"
+          ],
+          "grounded_refs": [
+            "Landroid/provider/Settings$Secure;->getString"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-static {v0}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;\""
+      },
+      {
+        "rank": 4,
+        "signature": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V",
+        "classname": "Lorg/research/realisticmalapp/PrivacyScenario;",
+        "methodname": "harvestContactDirectory",
+        "descriptor": "(Landroid/content/Context;)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\n```\n```smali\nsget-object v1, Landroid/provider/ContactsContract$Contacts;->CONTENT_URI:Landroid/net/Uri;\n```\n```smali\ninvoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;\n```\n```smali\ninvoke-interface {v0}, Landroid/database/Cursor;->getCount()I\n```\n```smali\ninvoke-static {v2}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\n```",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/content/Context;->getContentResolver",
+            "Landroid/provider/ContactsContract$Contacts;->CONTENT_URI",
+            "Landroid/content/ContentResolver;->query",
+            "Landroid/database/Cursor;->getCount",
+            "Lorg/research/realisticmalapp/EvidenceRecorder;->record"
+          ],
+          "grounded_refs": [
+            "Landroid/content/Context;->getContentResolver",
+            "Landroid/provider/ContactsContract$Contacts;->CONTENT_URI",
+            "Landroid/content/ContentResolver;->query",
+            "Landroid/database/Cursor;->getCount",
+            "Lorg/research/realisticmalapp/EvidenceRecorder;->record"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\n```\n```smali\nsget-object v1, L"
+      },
+      {
+        "rank": 5,
+        "signature": "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V",
+        "classname": "Lorg/research/realisticmalapp/TrickyScenario;",
+        "methodname": "hideAppIcon",
+        "descriptor": "(Landroid/content/Context;)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "11",
+        "confidence": 90,
+        "evidence": "\"invoke-virtual {v0, v1, v2, v3}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\"",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+          ],
+          "grounded_refs": [
+            "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1, v2, v3}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\""
+      },
+      {
+        "rank": 6,
+        "signature": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V",
+        "classname": "Lorg/research/realisticmalapp/PrivacyScenario;",
+        "methodname": "harvestDeviceLocation",
+        "descriptor": "(Landroid/content/Context;)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-virtual {v0, v1}, Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;\n```\n```smali\ninvoke-static {v2}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\n```",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/location/LocationManager;->getLastKnownLocation",
+            "Lorg/research/realisticmalapp/EvidenceRecorder;->record"
+          ],
+          "grounded_refs": [
+            "Landroid/location/LocationManager;->getLastKnownLocation",
+            "Lorg/research/realisticmalapp/EvidenceRecorder;->record"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v1}, Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;\n```"
+      },
+      {
+        "rank": 8,
+        "signature": "Lorg/research/realisticmalapp/SyncReceiver;->onReceive(Landroid/content/Context;Landroid/content/Intent;)V",
+        "classname": "Lorg/research/realisticmalapp/SyncReceiver;",
+        "methodname": "onReceive",
+        "descriptor": "(Landroid/content/Context;Landroid/content/Intent;)V",
+        "in_gt": false,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "- \"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V\" - Accessing phone identifiers (IMEI, IMSI).\n- \"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V\" - Reading call logs.",
+        "grounding": {
+          "cited_refs": [
+            "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers",
+            "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot"
+          ],
+          "grounded_refs": [
+            "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers",
+            "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n- \"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V\" - Accessin"
+      },
+      {
+        "rank": 9,
+        "signature": "Lorg/research/realisticmalapp/MaintenanceService;->onStartCommand(Landroid/content/Intent;II)I",
+        "classname": "Lorg/research/realisticmalapp/MaintenanceService;",
+        "methodname": "onStartCommand",
+        "descriptor": "(Landroid/content/Intent;II)I",
+        "in_gt": false,
+        "verdict": "malicious",
+        "pred_behavior_id": "11",
+        "confidence": 90,
+        "evidence": "- \"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V\" - This line indicates an attempt to manipulate the app's icon, which is a form of evasion technique.\n- \"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V\" - This line indicates an attempt to read the device's Android ID, which is a sensitive piece of user data.",
+        "grounding": {
+          "cited_refs": [
+            "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon",
+            "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId"
+          ],
+          "grounded_refs": [
+            "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon",
+            "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \n- \"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V\" - This line indicates an"
+      },
+      {
+        "rank": 10,
+        "signature": "Lorg/research/realisticmalapp/ScenarioRouter$1;->run()V",
+        "classname": "Lorg/research/realisticmalapp/ScenarioRouter$1;",
+        "methodname": "run",
+        "descriptor": "()V",
+        "in_gt": false,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "\"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V\"",
+        "grounding": {
+          "cited_refs": [
+            "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation"
+          ],
+          "grounded_refs": [
+            "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V\""
+      },
+      {
+        "rank": 11,
+        "signature": "Lorg/research/realisticmalapp/ScenarioRouter$2;->run()V",
+        "classname": "Lorg/research/realisticmalapp/ScenarioRouter$2;",
+        "methodname": "run",
+        "descriptor": "()V",
+        "in_gt": false,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "\"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V\"",
+        "grounding": {
+          "cited_refs": [
+            "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory"
+          ],
+          "grounded_refs": [
+            "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V\""
+      },
+      {
+        "rank": 16,
+        "signature": "Lorg/research/realisticmalapp/EscalationScenario;->probeSystemPaths()V",
+        "classname": "Lorg/research/realisticmalapp/EscalationScenario;",
+        "methodname": "probeSystemPaths",
+        "descriptor": "()V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "7",
+        "confidence": 90,
+        "evidence": "\"invoke-virtual {v0}, Ljava/io/File;->exists()Z\"",
+        "grounding": {
+          "cited_refs": [
+            "Ljava/io/File;->exists"
+          ],
+          "grounded_refs": [
+            "Ljava/io/File;->exists"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 7\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0}, Ljava/io/File;->exists()Z\""
+      }
+    ]
+  },
+  "per_candidate": [
+    {
+      "rank": 1,
+      "signature": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V",
+      "classname": "Lorg/research/realisticmalapp/TelephonyScenario;",
+      "methodname": "harvestPhoneIdentifiers",
+      "descriptor": "(Landroid/content/Context;)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "\"invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getLine1Number()Ljava/lang/String;\"",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/telephony/TelephonyManager;->getLine1Number"
+        ],
+        "grounded_refs": [
+          "Landroid/telephony/TelephonyManager;->getLine1Number"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getLine1Number()Ljava/lang/String;\""
+    },
+    {
+      "rank": 2,
+      "signature": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V",
+      "classname": "Lorg/research/realisticmalapp/TelephonyScenario;",
+      "methodname": "harvestCallLogSnapshot",
+      "descriptor": "(Landroid/content/Context;)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;\n```\nThis method accesses the call log by querying the `CallLog.Calls.CONTENT_URI`, which is a sensitive API call related to privacy and user data.",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/content/ContentResolver;->query"
+        ],
+        "grounded_refs": [
+          "Landroid/content/ContentResolver;->query"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Lja"
+    },
+    {
+      "rank": 3,
+      "signature": "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V",
+      "classname": "Lorg/research/realisticmalapp/TrickyScenario;",
+      "methodname": "readDeviceAndroidId",
+      "descriptor": "(Landroid/content/Context;)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "\"invoke-static {v0}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;\"",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/provider/Settings$Secure;->getString"
+        ],
+        "grounded_refs": [
+          "Landroid/provider/Settings$Secure;->getString"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-static {v0}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;\""
+    },
+    {
+      "rank": 4,
+      "signature": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V",
+      "classname": "Lorg/research/realisticmalapp/PrivacyScenario;",
+      "methodname": "harvestContactDirectory",
+      "descriptor": "(Landroid/content/Context;)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\n```\n```smali\nsget-object v1, Landroid/provider/ContactsContract$Contacts;->CONTENT_URI:Landroid/net/Uri;\n```\n```smali\ninvoke-virtual/range {v0 .. v5}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;\n```\n```smali\ninvoke-interface {v0}, Landroid/database/Cursor;->getCount()I\n```\n```smali\ninvoke-static {v2}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\n```",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/content/Context;->getContentResolver",
+          "Landroid/provider/ContactsContract$Contacts;->CONTENT_URI",
+          "Landroid/content/ContentResolver;->query",
+          "Landroid/database/Cursor;->getCount",
+          "Lorg/research/realisticmalapp/EvidenceRecorder;->record"
+        ],
+        "grounded_refs": [
+          "Landroid/content/Context;->getContentResolver",
+          "Landroid/provider/ContactsContract$Contacts;->CONTENT_URI",
+          "Landroid/content/ContentResolver;->query",
+          "Landroid/database/Cursor;->getCount",
+          "Lorg/research/realisticmalapp/EvidenceRecorder;->record"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\n```\n```smali\nsget-object v1, L"
+    },
+    {
+      "rank": 5,
+      "signature": "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V",
+      "classname": "Lorg/research/realisticmalapp/TrickyScenario;",
+      "methodname": "hideAppIcon",
+      "descriptor": "(Landroid/content/Context;)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "11",
+      "confidence": 90,
+      "evidence": "\"invoke-virtual {v0, v1, v2, v3}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\"",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+        ],
+        "grounded_refs": [
+          "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1, v2, v3}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\""
+    },
+    {
+      "rank": 6,
+      "signature": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V",
+      "classname": "Lorg/research/realisticmalapp/PrivacyScenario;",
+      "methodname": "harvestDeviceLocation",
+      "descriptor": "(Landroid/content/Context;)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-virtual {v0, v1}, Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;\n```\n```smali\ninvoke-static {v2}, Lorg/research/realisticmalapp/EvidenceRecorder;->record(Ljava/lang/String;)V\n```",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/location/LocationManager;->getLastKnownLocation",
+          "Lorg/research/realisticmalapp/EvidenceRecorder;->record"
+        ],
+        "grounded_refs": [
+          "Landroid/location/LocationManager;->getLastKnownLocation",
+          "Lorg/research/realisticmalapp/EvidenceRecorder;->record"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v1}, Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;\n```"
+    },
+    {
+      "rank": 7,
+      "signature": "Lorg/research/realisticmalapp/EscalationScenario;->modifyPrivateConfigFile(Landroid/content/Context;)V",
+      "classname": "Lorg/research/realisticmalapp/EscalationScenario;",
+      "methodname": "modifyPrivateConfigFile",
+      "descriptor": "(Landroid/content/Context;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 8,
+      "signature": "Lorg/research/realisticmalapp/SyncReceiver;->onReceive(Landroid/content/Context;Landroid/content/Intent;)V",
+      "classname": "Lorg/research/realisticmalapp/SyncReceiver;",
+      "methodname": "onReceive",
+      "descriptor": "(Landroid/content/Context;Landroid/content/Intent;)V",
+      "in_gt": false,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "- \"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V\" - Accessing phone identifiers (IMEI, IMSI).\n- \"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V\" - Reading call logs.",
+      "grounding": {
+        "cited_refs": [
+          "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers",
+          "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot"
+        ],
+        "grounded_refs": [
+          "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers",
+          "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n- \"invoke-virtual {v0, p1}, Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V\" - Accessin"
+    },
+    {
+      "rank": 9,
+      "signature": "Lorg/research/realisticmalapp/MaintenanceService;->onStartCommand(Landroid/content/Intent;II)I",
+      "classname": "Lorg/research/realisticmalapp/MaintenanceService;",
+      "methodname": "onStartCommand",
+      "descriptor": "(Landroid/content/Intent;II)I",
+      "in_gt": false,
+      "verdict": "malicious",
+      "pred_behavior_id": "11",
+      "confidence": 90,
+      "evidence": "- \"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V\" - This line indicates an attempt to manipulate the app's icon, which is a form of evasion technique.\n- \"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V\" - This line indicates an attempt to read the device's Android ID, which is a sensitive piece of user data.",
+      "grounding": {
+        "cited_refs": [
+          "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon",
+          "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId"
+        ],
+        "grounded_refs": [
+          "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon",
+          "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \n- \"invoke-virtual {v0, p0}, Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V\" - This line indicates an"
+    },
+    {
+      "rank": 10,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter$1;->run()V",
+      "classname": "Lorg/research/realisticmalapp/ScenarioRouter$1;",
+      "methodname": "run",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "\"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V\"",
+      "grounding": {
+        "cited_refs": [
+          "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation"
+        ],
+        "grounded_refs": [
+          "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V\""
+    },
+    {
+      "rank": 11,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter$2;->run()V",
+      "classname": "Lorg/research/realisticmalapp/ScenarioRouter$2;",
+      "methodname": "run",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "\"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V\"",
+      "grounding": {
+        "cited_refs": [
+          "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory"
+        ],
+        "grounded_refs": [
+          "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0, v1}, Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V\""
+    },
+    {
+      "rank": 12,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter$4;->run()V",
+      "classname": "Lorg/research/realisticmalapp/ScenarioRouter$4;",
+      "methodname": "run",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 13,
+      "signature": "Lorg/research/realisticmalapp/MainActivity;->onCreate(Landroid/os/Bundle;)V",
+      "classname": "Lorg/research/realisticmalapp/MainActivity;",
+      "methodname": "onCreate",
+      "descriptor": "(Landroid/os/Bundle;)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 14,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter;->registerCallbacks(Landroid/content/Context;)V",
+      "classname": "Lorg/research/realisticmalapp/ScenarioRouter;",
+      "methodname": "registerCallbacks",
+      "descriptor": "(Landroid/content/Context;)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 15,
+      "signature": "Lorg/research/realisticmalapp/MaintenanceService;->onBind(Landroid/content/Intent;)Landroid/os/IBinder;",
+      "classname": "Lorg/research/realisticmalapp/MaintenanceService;",
+      "methodname": "onBind",
+      "descriptor": "(Landroid/content/Intent;)Landroid/os/IBinder;",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 16,
+      "signature": "Lorg/research/realisticmalapp/EscalationScenario;->probeSystemPaths()V",
+      "classname": "Lorg/research/realisticmalapp/EscalationScenario;",
+      "methodname": "probeSystemPaths",
+      "descriptor": "()V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "7",
+      "confidence": 90,
+      "evidence": "\"invoke-virtual {v0}, Ljava/io/File;->exists()Z\"",
+      "grounding": {
+        "cited_refs": [
+          "Ljava/io/File;->exists"
+        ],
+        "grounded_refs": [
+          "Ljava/io/File;->exists"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 7\nCONFIDENCE: 90\nEVIDENCE: \"invoke-virtual {v0}, Ljava/io/File;->exists()Z\""
+    },
+    {
+      "rank": 17,
+      "signature": "Lorg/research/realisticmalapp/ScenarioRouter;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    },
+    {
+      "rank": 18,
+      "signature": "Lorg/research/realisticmalapp/TrickyScenario;-><init>()V",
+      "in_gt": false,
+      "verdict": "unavailable",
+      "error": "no smali method body available (not judged)"
+    }
+  ]
+}

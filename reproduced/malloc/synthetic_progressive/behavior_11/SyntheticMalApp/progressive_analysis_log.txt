@@ -1,0 +1,36 @@
+2026-09-15 12:51:24,893 - INFO - Analyzing behavior 11: Tricky Behavior - Methods implementing evasion techniques:
+(1) - Icon/label manipulation
+(2) - App hiding mechanisms
+(3) - Settings modification
+(4) - False uninstall messages
+Example: Maikspy error message pattern
+Look for: Package visibility changes, settings modifications, fake error messages.
+2026-09-15 12:51:24,893 - INFO - Searching for Smali files in: 0_Data/Cache/SyntheticMalApp/smali/org/research/syntheticmalloc
+2026-09-15 12:51:24,893 - INFO - Searching for Smali files in: 0_Data/Cache/SyntheticMalApp/smali_classes2/org/research/syntheticmalloc
+2026-09-15 12:51:24,894 - INFO - Found 13 Smali files to analyze
+2026-09-15 12:51:24,894 - INFO - Processing class 1/13: R
+2026-09-15 12:51:30,517 - INFO - Processing class 2/13: ScenarioRouter$2
+2026-09-15 12:51:36,324 - INFO - Processing class 3/13: ScenarioRouter$1
+2026-09-15 12:51:43,308 - INFO - Processing class 4/13: SmsScenario
+2026-09-15 12:51:49,902 - INFO - Processing class 5/13: PrivacyScenario
+2026-09-15 12:51:55,016 - INFO - Processing class 6/13: ScenarioRouter$3
+2026-09-15 12:52:02,384 - INFO - Processing class 7/13: AccessibilityScenario
+2026-09-15 12:52:11,015 - INFO - Processing class 8/13: ScenarioBootstrap
+2026-09-15 12:52:18,361 - INFO - Processing class 9/13: TrickyScenario
+2026-09-15 12:52:24,327 - INFO - Processing class 10/13: ScenarioRouter
+2026-09-15 12:52:32,435 - INFO - Progress: 10 classes out of 13 [76.92%]
+2026-09-15 12:52:32,435 - INFO - Processing class 11/13: EvidenceRecorder
+2026-09-15 12:52:39,847 - INFO - Processing class 12/13: MainActivity
+2026-09-15 12:53:05,067 - INFO - Found malicious class MainActivity (Detected by: qwen2.5-coder:7b-instruct-q4_K_M)
+2026-09-15 12:53:05,067 - INFO - Processing class 13/13: ScenarioRouter$4
+2026-09-15 12:53:13,995 - INFO - Progress: 13 classes out of 13 [100.00%]
+2026-09-15 12:53:14,160 - INFO - 
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 13
+--- 📊 Total Malicious Classes Found: 1
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder:7b-instruct-q4_K_M:
+        • Malicious Classes: 1 (7.69%)
+        • Total Tokens: 0
+        • Total Requests: 14

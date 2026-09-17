@@ -1,0 +1,39 @@
+2026-09-15 12:36:11,806 - INFO - Analyzing behavior 1: Privacy Stealing - Methods that access or exfiltrate sensitive user data including:
+(1) - Accessing Contact Lists – Retrieving the user's contact details from the device's storage.
+(2) - Reading SMS Messages – Accessing and potentially forwarding SMS messages to external servers.
+(3) - Collecting Location Data – Gathering precise GPS or network-based location information.
+(4) - Extracting Phone Numbers – Accessing the device's phone number or identifiers such as IMEI and IMSI.
+(5) - Harvesting Call Logs – Reading historical data on incoming, outgoing, or missed calls.
+(6) - Intercepting Communications – Monitoring or manipulating SMS or call-based communication.
+(7) - Exfiltrating User Data – Sending private information to external servers or networks.
+Look for: Permission checks, content provider queries, telephony manager access, location services, file operations targeting private directories.
+2026-09-15 12:36:11,806 - INFO - Searching for Smali files in: 0_Data/Cache/SyntheticMalApp/smali/org/research/syntheticmalloc
+2026-09-15 12:36:11,806 - INFO - Searching for Smali files in: 0_Data/Cache/SyntheticMalApp/smali_classes2/org/research/syntheticmalloc
+2026-09-15 12:36:11,806 - INFO - Found 13 Smali files to analyze
+2026-09-15 12:36:11,807 - INFO - Processing class 1/13: R
+2026-09-15 12:39:17,277 - INFO - Processing class 2/13: ScenarioRouter$2
+2026-09-15 12:39:39,572 - INFO - Found malicious class ScenarioRouter$2 (Detected by: qwen2.5-coder:7b-instruct-q4_K_M)
+2026-09-15 12:39:39,574 - INFO - Processing class 3/13: ScenarioRouter$1
+2026-09-15 12:39:51,156 - INFO - Processing class 4/13: SmsScenario
+2026-09-15 12:40:02,187 - INFO - Processing class 5/13: PrivacyScenario
+2026-09-15 12:40:14,596 - INFO - Processing class 6/13: ScenarioRouter$3
+2026-09-15 12:40:39,610 - INFO - Processing class 7/13: AccessibilityScenario
+2026-09-15 12:42:26,019 - INFO - Processing class 8/13: ScenarioBootstrap
+2026-09-15 12:44:37,164 - INFO - Processing class 9/13: TrickyScenario
+2026-09-15 12:45:44,517 - INFO - Processing class 10/13: ScenarioRouter
+2026-09-15 12:46:20,198 - INFO - Found malicious class ScenarioRouter (Detected by: qwen2.5-coder:7b-instruct-q4_K_M)
+2026-09-15 12:46:20,199 - INFO - Progress: 10 classes out of 13 [76.92%]
+2026-09-15 12:46:20,199 - INFO - Processing class 11/13: EvidenceRecorder
+2026-09-15 12:46:30,332 - INFO - Processing class 12/13: MainActivity
+2026-09-15 12:46:38,240 - INFO - Processing class 13/13: ScenarioRouter$4
+2026-09-15 12:46:51,302 - INFO - Progress: 13 classes out of 13 [100.00%]
+2026-09-15 12:46:51,534 - INFO - 
+--- 📊 PROGRESSIVE ANALYSIS SUMMARY
+--- 📊 Total Classes Analyzed: 13
+--- 📊 Total Malicious Classes Found: 2
+
+--- 📊 Per-LLM Statistics:
+      - qwen2.5-coder:7b-instruct-q4_K_M:
+        • Malicious Classes: 2 (15.38%)
+        • Total Tokens: 0
+        • Total Requests: 15

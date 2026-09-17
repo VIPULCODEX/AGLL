@@ -1,0 +1,702 @@
+{
+  "summary": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "top_pct": 0.05,
+    "n_candidates": 18,
+    "gt_total": 12,
+    "tp": 7,
+    "fp": 3,
+    "fn": 5,
+    "precision": 0.7,
+    "recall": 0.5833,
+    "f1": 0.6364,
+    "parse_errors": 0,
+    "fn_list": [
+      "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->lambda$onCreateView$0$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment(Landroid/view/View;)V",
+      "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "(structural miss) ('Llu/snt/trux/koopaapp/ui/home/RequestData2Fragment;', 'lambda$onCreateView$2$lu-snt-trux-koopaapp-ui-home-RequestData2Fragment', '(Landroid/view/View;)V')",
+      "(structural miss) ('Llu/snt/trux/koopaapp/ui/home/RequestData2Fragment;', 'lambda$onCreateView$3$lu-snt-trux-koopaapp-ui-home-RequestData2Fragment', '(Landroid/widget/FrameLayout;)V')",
+      "(structural miss) ('Llu/snt/trux/koopaapp/ui/home/RequestData2Fragment;', 'onCreateView', '(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;')"
+    ],
+    "predicted_malicious": [
+      {
+        "rank": 2,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;",
+        "methodname": "fetchAndLogContacts",
+        "descriptor": "()V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 95,
+        "evidence": "- \"invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\"\n- \"invoke-interface {v1}, Landroid/database/Cursor;->moveToNext()Z\"\n- \"invoke-interface {v1, v3}, Landroid/database/Cursor;->getColumnIndex(Ljava/lang/String;)I\"\n- \"invoke-interface {v1, v3}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;\"\n- \"invoke-interface {v1, v4}, Landroid/database/Cursor;->getColumnIndex(Ljava/lang/String;)I\"\n- \"invoke-interface {v1, v4}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;\"",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/content/Context;->getContentResolver",
+            "Landroid/database/Cursor;->moveToNext",
+            "Landroid/database/Cursor;->getColumnIndex",
+            "Landroid/database/Cursor;->getString"
+          ],
+          "grounded_refs": [
+            "Landroid/content/Context;->getContentResolver",
+            "Landroid/database/Cursor;->moveToNext",
+            "Landroid/database/Cursor;->getColumnIndex",
+            "Landroid/database/Cursor;->getString"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \n- \"invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\"\n- \"invoke-interface {v1}, Landroid/"
+      },
+      {
+        "rank": 3,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment$SendDataToServerTask;->doInBackground([Ljava/lang/String;)Ljava/lang/Integer;",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment$SendDataToServerTask;",
+        "methodname": "doInBackground",
+        "descriptor": "([Ljava/lang/String;)Ljava/lang/Integer;",
+        "in_gt": false,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-virtual {v3}, Ljava/net/HttpURLConnection;->getResponseCode()I\n```\nThis line indicates that the method is making a network request and retrieving a response code, which is a common behavior for privacy-stealing malware that exfiltrates user data to a remote server.",
+        "grounding": {
+          "cited_refs": [
+            "Ljava/net/HttpURLConnection;->getResponseCode"
+          ],
+          "grounded_refs": [
+            "Ljava/net/HttpURLConnection;->getResponseCode"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v3}, Ljava/net/HttpURLConnection;->getResponseCode()I\n```\nThis line indicates that the method is making a network re"
+      },
+      {
+        "rank": 4,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->retrieveLocation()V",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;",
+        "methodname": "retrieveLocation",
+        "descriptor": "()V",
+        "in_gt": false,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "- \"invoke-static {v0, v1}, Landroidx/core/content/ContextCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I\" - Checks for the ACCESS_FINE_LOCATION permission.\n- \"invoke-virtual {v0}, Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation()Lcom/google/android/gms/tasks/Task;\" - Retrieves the user's location.\n- \"invoke-virtual {p0}, Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->requestPermissions([Ljava/lang/String;I)V\" - Requests the ACCESS_FINE_LOCATION permission if not already granted.",
+        "grounding": {
+          "cited_refs": [
+            "Landroidx/core/content/ContextCompat;->checkSelfPermission",
+            "Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation",
+            "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->requestPermissions"
+          ],
+          "grounded_refs": [
+            "Landroidx/core/content/ContextCompat;->checkSelfPermission",
+            "Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation",
+            "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->requestPermissions"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n- \"invoke-static {v0, v1}, Landroidx/core/content/ContextCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I\" - Checks"
+      },
+      {
+        "rank": 5,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->toggleAppIcon()V",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;",
+        "methodname": "toggleAppIcon",
+        "descriptor": "()V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "11",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-virtual {v0, v2, v6, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\ninvoke-virtual {v0, v3, v5, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```\nThese lines indicate that the method is manipulating the enabled state of components, which is a common evasion technique to hide the app or change its behavior.",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+          ],
+          "grounded_refs": [
+            "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v2, v6, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)"
+      },
+      {
+        "rank": 6,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;",
+        "methodname": "lambda$fetchAndLogContacts$0",
+        "descriptor": "(Lorg/json/JSONArray;)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-virtual {v2}, Ljava/net/HttpURLConnection;->getResponseCode()I\nmove-result v4\n```\n```smali\ninvoke-static {v0, v5}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I\n```\n```smali\ninvoke-virtual {v2}, Ljava/net/HttpURLConnection;->disconnect()V\n```\nThe method sends user data (contacts) to a remote server (`http://192.15.18.36/contacts`) and logs the server response, which are clear indicators of privacy-stealing behavior.",
+        "grounding": {
+          "cited_refs": [
+            "Ljava/net/HttpURLConnection;->getResponseCode",
+            "Landroid/util/Log;->d",
+            "Ljava/net/HttpURLConnection;->disconnect"
+          ],
+          "grounded_refs": [
+            "Ljava/net/HttpURLConnection;->getResponseCode",
+            "Landroid/util/Log;->d",
+            "Ljava/net/HttpURLConnection;->disconnect"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v2}, Ljava/net/HttpURLConnection;->getResponseCode()I\nmove-result v4\n```\n```smali\ninvoke-static {v0, v5}, Landroid/u"
+      },
+      {
+        "rank": 7,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;",
+        "methodname": "hideApp",
+        "descriptor": "()V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "11",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-virtual {v0, v2, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\ninvoke-virtual {v0, v3, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```\nThese lines indicate that the method is disabling components (aliases) that could potentially be used to hide the app from the launcher, which is a form of app hiding mechanism.",
+        "grounding": {
+          "cited_refs": [
+            "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+          ],
+          "grounded_refs": [
+            "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v2, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)"
+      },
+      {
+        "rank": 8,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->onRequestPermissionsResult(I[Ljava/lang/String;[I)V",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;",
+        "methodname": "onRequestPermissionsResult",
+        "descriptor": "(I[Ljava/lang/String;[I)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```",
+        "grounding": {
+          "cited_refs": [
+            "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts"
+          ],
+          "grounded_refs": [
+            "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```"
+      },
+      {
+        "rank": 10,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;",
+        "methodname": "onCreateView",
+        "descriptor": "(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 85,
+        "evidence": "- `invoke-static {v1, v2}, Landroidx/core/app/ActivityCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I`\n- `invoke-virtual {p0, v1, v2}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->requestPermissions([Ljava/lang/String;I)V`\n- `invoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V`",
+        "grounding": {
+          "cited_refs": [
+            "Landroidx/core/app/ActivityCompat;->checkSelfPermission",
+            "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->requestPermissions",
+            "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts"
+          ],
+          "grounded_refs": [
+            "Landroidx/core/app/ActivityCompat;->checkSelfPermission",
+            "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->requestPermissions",
+            "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 85\nEVIDENCE: \n- `invoke-static {v1, v2}, Landroidx/core/app/ActivityCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I`\n- `invoke-v"
+      },
+      {
+        "rank": 12,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment$$ExternalSyntheticLambda0;->run()V",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment$$ExternalSyntheticLambda0;",
+        "methodname": "run",
+        "descriptor": "()V",
+        "in_gt": false,
+        "verdict": "malicious",
+        "pred_behavior_id": "1",
+        "confidence": 90,
+        "evidence": "\"invoke-static {v0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V\"",
+        "grounding": {
+          "cited_refs": [
+            "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0"
+          ],
+          "grounded_refs": [
+            "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-static {v0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V\""
+      },
+      {
+        "rank": 14,
+        "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->lambda$onCreateView$1$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment(Landroid/view/View;)V",
+        "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;",
+        "methodname": "lambda$onCreateView$1$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment",
+        "descriptor": "(Landroid/view/View;)V",
+        "in_gt": true,
+        "verdict": "malicious",
+        "pred_behavior_id": "11",
+        "confidence": 90,
+        "evidence": "```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V\n```",
+        "grounding": {
+          "cited_refs": [
+            "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp"
+          ],
+          "grounded_refs": [
+            "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp"
+          ],
+          "ungrounded_refs": [],
+          "grounded": true,
+          "has_evidence": true
+        },
+        "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V\n```"
+      }
+    ]
+  },
+  "per_candidate": [
+    {
+      "rank": 1,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;",
+      "methodname": "onCreateView",
+      "descriptor": "(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 2,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;",
+      "methodname": "fetchAndLogContacts",
+      "descriptor": "()V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 95,
+      "evidence": "- \"invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\"\n- \"invoke-interface {v1}, Landroid/database/Cursor;->moveToNext()Z\"\n- \"invoke-interface {v1, v3}, Landroid/database/Cursor;->getColumnIndex(Ljava/lang/String;)I\"\n- \"invoke-interface {v1, v3}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;\"\n- \"invoke-interface {v1, v4}, Landroid/database/Cursor;->getColumnIndex(Ljava/lang/String;)I\"\n- \"invoke-interface {v1, v4}, Landroid/database/Cursor;->getString(I)Ljava/lang/String;\"",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/content/Context;->getContentResolver",
+          "Landroid/database/Cursor;->moveToNext",
+          "Landroid/database/Cursor;->getColumnIndex",
+          "Landroid/database/Cursor;->getString"
+        ],
+        "grounded_refs": [
+          "Landroid/content/Context;->getContentResolver",
+          "Landroid/database/Cursor;->moveToNext",
+          "Landroid/database/Cursor;->getColumnIndex",
+          "Landroid/database/Cursor;->getString"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 95\nEVIDENCE: \n- \"invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;\"\n- \"invoke-interface {v1}, Landroid/"
+    },
+    {
+      "rank": 3,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment$SendDataToServerTask;->doInBackground([Ljava/lang/String;)Ljava/lang/Integer;",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment$SendDataToServerTask;",
+      "methodname": "doInBackground",
+      "descriptor": "([Ljava/lang/String;)Ljava/lang/Integer;",
+      "in_gt": false,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-virtual {v3}, Ljava/net/HttpURLConnection;->getResponseCode()I\n```\nThis line indicates that the method is making a network request and retrieving a response code, which is a common behavior for privacy-stealing malware that exfiltrates user data to a remote server.",
+      "grounding": {
+        "cited_refs": [
+          "Ljava/net/HttpURLConnection;->getResponseCode"
+        ],
+        "grounded_refs": [
+          "Ljava/net/HttpURLConnection;->getResponseCode"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v3}, Ljava/net/HttpURLConnection;->getResponseCode()I\n```\nThis line indicates that the method is making a network re"
+    },
+    {
+      "rank": 4,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->retrieveLocation()V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;",
+      "methodname": "retrieveLocation",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "- \"invoke-static {v0, v1}, Landroidx/core/content/ContextCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I\" - Checks for the ACCESS_FINE_LOCATION permission.\n- \"invoke-virtual {v0}, Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation()Lcom/google/android/gms/tasks/Task;\" - Retrieves the user's location.\n- \"invoke-virtual {p0}, Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->requestPermissions([Ljava/lang/String;I)V\" - Requests the ACCESS_FINE_LOCATION permission if not already granted.",
+      "grounding": {
+        "cited_refs": [
+          "Landroidx/core/content/ContextCompat;->checkSelfPermission",
+          "Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation",
+          "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->requestPermissions"
+        ],
+        "grounded_refs": [
+          "Landroidx/core/content/ContextCompat;->checkSelfPermission",
+          "Lcom/google/android/gms/location/FusedLocationProviderClient;->getLastLocation",
+          "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->requestPermissions"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n- \"invoke-static {v0, v1}, Landroidx/core/content/ContextCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I\" - Checks"
+    },
+    {
+      "rank": 5,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->toggleAppIcon()V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;",
+      "methodname": "toggleAppIcon",
+      "descriptor": "()V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "11",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-virtual {v0, v2, v6, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\ninvoke-virtual {v0, v3, v5, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```\nThese lines indicate that the method is manipulating the enabled state of components, which is a common evasion technique to hide the app or change its behavior.",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+        ],
+        "grounded_refs": [
+          "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v2, v6, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)"
+    },
+    {
+      "rank": 6,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;",
+      "methodname": "lambda$fetchAndLogContacts$0",
+      "descriptor": "(Lorg/json/JSONArray;)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-virtual {v2}, Ljava/net/HttpURLConnection;->getResponseCode()I\nmove-result v4\n```\n```smali\ninvoke-static {v0, v5}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I\n```\n```smali\ninvoke-virtual {v2}, Ljava/net/HttpURLConnection;->disconnect()V\n```\nThe method sends user data (contacts) to a remote server (`http://192.15.18.36/contacts`) and logs the server response, which are clear indicators of privacy-stealing behavior.",
+      "grounding": {
+        "cited_refs": [
+          "Ljava/net/HttpURLConnection;->getResponseCode",
+          "Landroid/util/Log;->d",
+          "Ljava/net/HttpURLConnection;->disconnect"
+        ],
+        "grounded_refs": [
+          "Ljava/net/HttpURLConnection;->getResponseCode",
+          "Landroid/util/Log;->d",
+          "Ljava/net/HttpURLConnection;->disconnect"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v2}, Ljava/net/HttpURLConnection;->getResponseCode()I\nmove-result v4\n```\n```smali\ninvoke-static {v0, v5}, Landroid/u"
+    },
+    {
+      "rank": 7,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;",
+      "methodname": "hideApp",
+      "descriptor": "()V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "11",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-virtual {v0, v2, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\ninvoke-virtual {v0, v3, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)V\n```\nThese lines indicate that the method is disabling components (aliases) that could potentially be used to hide the app from the launcher, which is a form of app hiding mechanism.",
+      "grounding": {
+        "cited_refs": [
+          "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+        ],
+        "grounded_refs": [
+          "Landroid/content/pm/PackageManager;->setComponentEnabledSetting"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-virtual {v0, v2, v4, v5}, Landroid/content/pm/PackageManager;->setComponentEnabledSetting(Landroid/content/ComponentName;II)"
+    },
+    {
+      "rank": 8,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->onRequestPermissionsResult(I[Ljava/lang/String;[I)V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;",
+      "methodname": "onRequestPermissionsResult",
+      "descriptor": "(I[Ljava/lang/String;[I)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```",
+      "grounding": {
+        "cited_refs": [
+          "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts"
+        ],
+        "grounded_refs": [
+          "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V\n```"
+    },
+    {
+      "rank": 9,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;->onRequestPermissionsResult(I[Ljava/lang/String;[I)V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment;",
+      "methodname": "onRequestPermissionsResult",
+      "descriptor": "(I[Ljava/lang/String;[I)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 10,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;",
+      "methodname": "onCreateView",
+      "descriptor": "(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 85,
+      "evidence": "- `invoke-static {v1, v2}, Landroidx/core/app/ActivityCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I`\n- `invoke-virtual {p0, v1, v2}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->requestPermissions([Ljava/lang/String;I)V`\n- `invoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts()V`",
+      "grounding": {
+        "cited_refs": [
+          "Landroidx/core/app/ActivityCompat;->checkSelfPermission",
+          "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->requestPermissions",
+          "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts"
+        ],
+        "grounded_refs": [
+          "Landroidx/core/app/ActivityCompat;->checkSelfPermission",
+          "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->requestPermissions",
+          "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->fetchAndLogContacts"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 85\nEVIDENCE: \n- `invoke-static {v1, v2}, Landroidx/core/app/ActivityCompat;->checkSelfPermission(Landroid/content/Context;Ljava/lang/String;)I`\n- `invoke-v"
+    },
+    {
+      "rank": 11,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment$SendDataToServerTask;->doInBackground([Ljava/lang/Object;)Ljava/lang/Object;",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/TrainingFragment$SendDataToServerTask;",
+      "methodname": "doInBackground",
+      "descriptor": "([Ljava/lang/Object;)Ljava/lang/Object;",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 12,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment$$ExternalSyntheticLambda0;->run()V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment$$ExternalSyntheticLambda0;",
+      "methodname": "run",
+      "descriptor": "()V",
+      "in_gt": false,
+      "verdict": "malicious",
+      "pred_behavior_id": "1",
+      "confidence": 90,
+      "evidence": "\"invoke-static {v0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V\"",
+      "grounding": {
+        "cited_refs": [
+          "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0"
+        ],
+        "grounded_refs": [
+          "Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 1\nCONFIDENCE: 90\nEVIDENCE: \"invoke-static {v0}, Llu/snt/trux/koopaapp/ui/home/RequestData1Fragment;->lambda$fetchAndLogContacts$0(Lorg/json/JSONArray;)V\""
+    },
+    {
+      "rank": 13,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->lambda$onCreateView$0$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment(Landroid/view/View;)V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;",
+      "methodname": "lambda$onCreateView$0$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment",
+      "descriptor": "(Landroid/view/View;)V",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 14,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->lambda$onCreateView$1$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment(Landroid/view/View;)V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;",
+      "methodname": "lambda$onCreateView$1$lu-snt-trux-koopaapp-ui-home-RequestData3Fragment",
+      "descriptor": "(Landroid/view/View;)V",
+      "in_gt": true,
+      "verdict": "malicious",
+      "pred_behavior_id": "11",
+      "confidence": 90,
+      "evidence": "```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V\n```",
+      "grounding": {
+        "cited_refs": [
+          "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp"
+        ],
+        "grounded_refs": [
+          "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp"
+        ],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": true
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: yes\nBEHAVIOR_ID: 11\nCONFIDENCE: 90\nEVIDENCE: \n```smali\ninvoke-direct {p0}, Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->hideApp()V\n```"
+    },
+    {
+      "rank": 15,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment$$ExternalSyntheticLambda0;->onClick(Landroid/view/View;)V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment$$ExternalSyntheticLambda0;",
+      "methodname": "onClick",
+      "descriptor": "(Landroid/view/View;)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 16,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment$$ExternalSyntheticLambda1;->onClick(Landroid/view/View;)V",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment$$ExternalSyntheticLambda1;",
+      "methodname": "onClick",
+      "descriptor": "(Landroid/view/View;)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    },
+    {
+      "rank": 17,
+      "signature": "Llu/snt/trux/koopaapp/RegistrationActivity$1;->onClick(Landroid/view/View;)V",
+      "classname": "Llu/snt/trux/koopaapp/RegistrationActivity$1;",
+      "methodname": "onClick",
+      "descriptor": "(Landroid/view/View;)V",
+      "in_gt": false,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no\nBEHAVIOR_ID: none\nCONFIDENCE: 0\nEVIDENCE: NONE"
+    },
+    {
+      "rank": 18,
+      "signature": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "classname": "Llu/snt/trux/koopaapp/ui/home/RequestData3Fragment;",
+      "methodname": "onCreateView",
+      "descriptor": "(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;",
+      "in_gt": true,
+      "verdict": "benign",
+      "pred_behavior_id": "none",
+      "confidence": 0,
+      "evidence": "NONE",
+      "grounding": {
+        "cited_refs": [],
+        "grounded_refs": [],
+        "ungrounded_refs": [],
+        "grounded": true,
+        "has_evidence": false
+      },
+      "raw_response_excerpt": "IS_MALICIOUS: no  \nBEHAVIOR_ID: none  \nCONFIDENCE: 0  \nEVIDENCE: NONE"
+    }
+  ]
+}
