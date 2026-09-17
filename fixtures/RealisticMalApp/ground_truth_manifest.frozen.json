@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "fixture": "RealisticMalApp",
+  "status": "frozen: descriptor-verified against real decompiled smali",
+  "apk_sha256": "153097efbcb094bafcb04c3a52d8cc94464949ab67a2346ff2547d2156864637",
+  "apk_path": "MalLoc/0_Data/APKs/RealisticMalApp_dir/RealisticMalApp.apk",
+  "methods": [
+    {
+      "class": "org.research.realisticmalapp.PrivacyScenario",
+      "method": "harvestDeviceLocation(android.content.Context)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V",
+      "category_id": 1,
+      "category": "Privacy Stealing",
+      "role": "payload-model",
+      "why": "Real LocationManager.getLastKnownLocation() call - genuine GPS location access, matches MalLoc behavior-1's 'Collecting Location Data' cue exactly.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestDeviceLocation(Landroid/content/Context;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/PrivacyScenario.smali",
+      "smali_line": 92
+    },
+    {
+      "class": "org.research.realisticmalapp.PrivacyScenario",
+      "method": "harvestContactDirectory(android.content.Context)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V",
+      "category_id": 1,
+      "category": "Privacy Stealing",
+      "role": "payload-model",
+      "why": "Real ContentResolver.query(ContactsContract.Contacts.CONTENT_URI) - genuine contact-list read, matches MalLoc behavior-1's 'Accessing Contact Lists' cue exactly.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/PrivacyScenario;->harvestContactDirectory(Landroid/content/Context;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/PrivacyScenario.smali",
+      "smali_line": 18
+    },
+    {
+      "class": "org.research.realisticmalapp.TelephonyScenario",
+      "method": "harvestPhoneIdentifiers(android.content.Context)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V",
+      "category_id": 2,
+      "category": "SMS/CALL Abuse",
+      "role": "payload-model",
+      "why": "Real TelephonyManager.getLine1Number() call - genuine telephony API usage (MalLoc behavior-2's own 'Look for' cue), safely reinterpreted away from actual SMS send/intercept/delete - no SEND_SMS/READ_SMS/RECEIVE_SMS permission exists anywhere in this app.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestPhoneIdentifiers(Landroid/content/Context;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/TelephonyScenario.smali",
+      "smali_line": 92
+    },
+    {
+      "class": "org.research.realisticmalapp.TelephonyScenario",
+      "method": "harvestCallLogSnapshot(android.content.Context)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V",
+      "category_id": 2,
+      "category": "SMS/CALL Abuse",
+      "role": "payload-model",
+      "why": "Real ContentResolver.query(CallLog.Calls.CONTENT_URI) - matches MalLoc behavior-2's 'Monitoring call logs' cue exactly.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/TelephonyScenario;->harvestCallLogSnapshot(Landroid/content/Context;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/TelephonyScenario.smali",
+      "smali_line": 18
+    },
+    {
+      "class": "org.research.realisticmalapp.EscalationScenario",
+      "method": "probeSystemPaths()",
+      "dex_descriptor": "Lorg/research/realisticmalapp/EscalationScenario;->probeSystemPaths()V",
+      "category_id": 7,
+      "category": "Privilege Escalation",
+      "role": "payload-model",
+      "why": "Real java.io.File.exists() root-binary probe (/system/xbin/su, /system/bin/su) - matches MalLoc behavior-7's 'Root checking' cue exactly, using only a permission-free stdlib API.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/EscalationScenario;->probeSystemPaths()V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/EscalationScenario.smali",
+      "smali_line": 111
+    },
+    {
+      "class": "org.research.realisticmalapp.EscalationScenario",
+      "method": "modifyPrivateConfigFile(android.content.Context)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/EscalationScenario;->modifyPrivateConfigFile(Landroid/content/Context;)V",
+      "category_id": 7,
+      "category": "Privilege Escalation",
+      "role": "payload-model",
+      "why": "Real Context.openFileOutput()/FileOutputStream write - matches MalLoc behavior-7's 'System file modifications' cue, sandboxed to this app's own private storage only (cannot touch a real system path or another app's data).",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/EscalationScenario;->modifyPrivateConfigFile(Landroid/content/Context;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/EscalationScenario.smali",
+      "smali_line": 18
+    },
+    {
+      "class": "org.research.realisticmalapp.TrickyScenario",
+      "method": "hideAppIcon(android.content.Context)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V",
+      "category_id": 11,
+      "category": "Tricky Behavior",
+      "role": "payload-model",
+      "why": "Real PackageManager.setComponentEnabledSetting() disabling this app's own launcher activity - matches MalLoc behavior-11's 'Icon/label manipulation' and 'App hiding mechanisms' cues exactly; targets only this app's own component (no system permission needed or held).",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/TrickyScenario;->hideAppIcon(Landroid/content/Context;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/TrickyScenario.smali",
+      "smali_line": 18
+    },
+    {
+      "class": "org.research.realisticmalapp.TrickyScenario",
+      "method": "readDeviceAndroidId(android.content.Context)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V",
+      "category_id": 11,
+      "category": "Tricky Behavior",
+      "role": "payload-model",
+      "why": "Real Settings.Secure.getString(ANDROID_ID) read - a genuine device-identifier fingerprinting primitive commonly paired with evasion/tricky-behavior logic in real malware; needs no dangerous permission.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/TrickyScenario;->readDeviceAndroidId(Landroid/content/Context;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/TrickyScenario.smali",
+      "smali_line": 52
+    },
+    {
+      "class": "org.research.realisticmalapp.MainActivity",
+      "method": "onCreate(android.os.Bundle)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/MainActivity;->onCreate(Landroid/os/Bundle;)V",
+      "category_id": null,
+      "category": "Wiring",
+      "role": "shared-entry",
+      "why": "Launcher Activity entry point; wires ScenarioRouter. Excluded from payload precision/recall per METHODOLOGY.md.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/MainActivity;->onCreate(Landroid/os/Bundle;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/MainActivity.smali",
+      "smali_line": 18
+    },
+    {
+      "class": "org.research.realisticmalapp.ScenarioRouter",
+      "method": "registerCallbacks(android.content.Context)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/ScenarioRouter;->registerCallbacks(Landroid/content/Context;)V",
+      "category_id": null,
+      "category": "Wiring",
+      "role": "callback-registration",
+      "why": "Wires 4 of the 8 payload methods (Privacy + Escalation scenarios) via Runnable dispatch - the same lambda/anonymous-class dispatch pattern used to stress-test AGLL's callback-dispatch-edge heuristic in SyntheticMalApp. Excluded from payload precision/recall.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/ScenarioRouter;->registerCallbacks(Landroid/content/Context;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/ScenarioRouter.smali",
+      "smali_line": 28
+    },
+    {
+      "class": "org.research.realisticmalapp.SyncReceiver",
+      "method": "onReceive(android.content.Context, android.content.Intent)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/SyncReceiver;->onReceive(Landroid/content/Context;Landroid/content/Intent;)V",
+      "category_id": null,
+      "category": "Wiring",
+      "role": "shared-entry",
+      "why": "Exported BroadcastReceiver entry point (reachable without user interaction, unlike MainActivity) - wires the 2 TelephonyScenario payloads directly and starts MaintenanceService. Tests entry-point detection against a component type SyntheticMalApp never exercised. Excluded from payload precision/recall.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/SyncReceiver;->onReceive(Landroid/content/Context;Landroid/content/Intent;)V",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/SyncReceiver.smali",
+      "smali_line": 18
+    },
+    {
+      "class": "org.research.realisticmalapp.MaintenanceService",
+      "method": "onStartCommand(android.content.Intent, int, int)",
+      "dex_descriptor": "Lorg/research/realisticmalapp/MaintenanceService;->onStartCommand(Landroid/content/Intent;II)I",
+      "category_id": null,
+      "category": "Wiring",
+      "role": "shared-dispatch",
+      "why": "Non-exported Service entry point, reached only via SyncReceiver's internal startService() call - wires the 2 TrickyScenario payloads. Tests entry-point detection against a Service reached transitively through another component, not directly from the manifest. Excluded from payload precision/recall.",
+      "verified_dex_descriptor": "Lorg/research/realisticmalapp/MaintenanceService;->onStartCommand(Landroid/content/Intent;II)I",
+      "smali_file": "smali_classes2/org/research/realisticmalapp/MaintenanceService.smali",
+      "smali_line": 28
+    }
+  ]
+}
