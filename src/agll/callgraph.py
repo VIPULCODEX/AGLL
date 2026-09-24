@@ -1,15 +1,14 @@
-"""
-APK loading, call-graph construction, and entry-point identification for
-Objective 1 stage one (see Three-Objective-Workflow.md). Thin wrapper around
-androguard 4.1.4 — see PROGRESS.md DECISIONS & WHY for why androguard was
-chosen and how its call graph is shaped (nodes are raw
-`androguard.core.dex.EncodedMethod` / `ExternalMethod` objects, edges are
-caller -> callee, one edge per caller/callee pair regardless of call count).
+"""APK loading, call-graph construction and entry-point detection (Stage 1).
+
+This is a thin layer over androguard. The call graph it returns has one node
+per method (androguard's `EncodedMethod` or `ExternalMethod`) and one
+caller -> callee edge per pair, regardless of how many call sites exist.
 """
 
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass
 
 import networkx as nx
@@ -17,14 +16,11 @@ from androguard.misc import AnalyzeAPK
 
 ANDROID_NS = "{http://schemas.android.com/apk/res/android}"
 
-# Lifecycle / callback method names treated as entry points when they occur
-# inside a manifest-declared component class. This is deliberately narrower
-# than androguard's own get_call_graph(entry_points=...) flag, which marks
-# every method of an entry-point class as "entrypoint" — that overcounts
-# (e.g. a private helper method never invoked by the framework). Restricting
-# to actual callback names is a design choice, see PROGRESS.md.
+# Callback names that count as entry points when they appear in an entry class.
+# androguard's own entry-point flag marks every method of such a class, which
+# also counts private helpers the framework never calls.
 ENTRY_POINT_METHOD_NAMES = {
-    # Activity / Fragment lifecycle
+    # Activity and Fragment lifecycle
     "onCreate", "onStart", "onResume", "onPause", "onStop", "onDestroy",
     "onRestart", "onCreateView", "onActivityResult", "onNewIntent",
     "onRequestPermissionsResult",
@@ -33,138 +29,117 @@ ENTRY_POINT_METHOD_NAMES = {
     # BroadcastReceiver
     "onReceive",
     # ContentProvider
-    "query", "insert", "update", "delete", "onCreate",
-    # Background work / threads, common attacker-triggerable-without-UI paths
+    "query", "insert", "update", "delete",
+    # Background work that can run without any UI interaction
     "doInBackground", "run", "onLocationChanged",
 }
 
-
-def load_apk(apk_path: str):
-    logging.getLogger("androguard").setLevel(logging.CRITICAL)
-    a, d, dx = AnalyzeAPK(apk_path)
-    return a, d, dx
-
-
-def build_call_graph(dx) -> nx.DiGraph:
-    return dx.get_call_graph()
-
-
-def add_callback_dispatch_edges(cg: nx.DiGraph) -> int:
-    """Verified gap (see PROGRESS.md KNOWN ISSUES): androguard's plain call
-    graph has an edge from a site to a lambda/anonymous-listener class's
-    `<init>` (the `new Foo(...)` call), but no edge from there to the
-    listener's actual callback method (`onClick`, `run`, `accept`, ...) —
-    that dispatch happens inside the Android framework once the listener is
-    registered, with no `invoke-*` bytecode connecting the two. Confirmed by
-    direct inspection: in the MalApp_1_9_11 sample,
-    `RequestData2Fragment$$ExternalSyntheticLambda0-><init>` was reachable
-    from `onCreateView` (dist 1) while its sibling `onClick` method — which
-    contains the actual `sendEmail` call — was unreachable (dist None).
-
-    This adds a synthetic edge from every caller of a lambda/anon-listener
-    class's `<init>` to every other (non-`<init>`) method in that same class,
-    modeling "constructing and registering a listener implies the framework
-    will eventually invoke it." This is a soundness-over-completeness
-    heuristic (may add edges for listeners that are constructed but never
-    actually registered) rather than a fix that models real Android listener
-    registration APIs (setOnClickListener, etc.) precisely — see PROGRESS.md
-    for why that fuller fix was out of scope for this pass.
-
-    Returns the number of synthetic edges added.
-    """
-    import re
-
-    lambda_marker = re.compile(r"\$\$ExternalSyntheticLambda\d+;$|\$\d+;$")
-
-    nodes_by_class: dict[str, list] = {}
-    for node, data in cg.nodes(data=True):
-        nodes_by_class.setdefault(data.get("classname", ""), []).append(node)
-
-    added = 0
-    for node, data in list(cg.nodes(data=True)):
-        if data.get("methodname") != "<init>":
-            continue
-        classname = data.get("classname", "")
-        if not lambda_marker.search(classname):
-            continue
-        callers = list(cg.predecessors(node))
-        siblings = [n for n in nodes_by_class.get(classname, []) if n != node]
-        for caller in callers:
-            for sibling in siblings:
-                if not cg.has_edge(caller, sibling):
-                    cg.add_edge(caller, sibling, synthetic=True)
-                    added += 1
-    return added
-
-
-@dataclass(frozen=True)
-class Component:
-    classname: str  # 'Lpkg/Class;' form
-    kind: str  # activity | service | receiver | provider
-    exported: bool
-
-
-def _exported_map(a, tag: str) -> dict[str, bool]:
-    """Map manifest component name (as declared, possibly relative, e.g.
-    '.MainActivity') -> exported bool, for a given manifest tag
-    (activity/activity-alias/service/receiver/provider)."""
-    manifest = a.get_android_manifest_xml()
-    result: dict[str, bool] = {}
-    if manifest is None:
-        return result
-    for el in manifest.findall(f".//{tag}"):
-        name = el.get(f"{ANDROID_NS}name")
-        if name is None:
-            continue
-        exported_attr = el.get(f"{ANDROID_NS}exported")
-        if exported_attr is not None:
-            exported = exported_attr == "true"
-        else:
-            # No explicit attribute: implicitly exported if it has an
-            # intent-filter (pre-Android-12 default behaviour), else private.
-            exported = el.find("intent-filter") is not None
-        result[name] = exported
-    return result
-
-
-def _to_dex_classname(package: str, manifest_name: str) -> str:
-    """Manifest component names are Java-style ('com.foo.Bar' or
-    '.Bar' relative to the package); dex/call-graph classnames are smali-style
-    ('Lcom/foo/Bar;'). Normalize the former to the latter."""
-    if manifest_name.startswith("."):
-        full = package + manifest_name
-    elif "." not in manifest_name:
-        full = package + "." + manifest_name
-    else:
-        full = manifest_name
-    return "L" + full.replace(".", "/") + ";"
-
-
-# Android framework base classes that carry their own lifecycle callbacks but
-# are never declared in AndroidManifest.xml (Fragments are hosted by an
-# Activity/FragmentManager, not launched by the OS directly). Verified bug:
-# an earlier version of this pipeline scoped entry points to manifest
-# components only, which silently zeroed out `dist_from_entry` for every
-# Fragment method in the sample app — including the ground-truth malicious
-# RequestData2Fragment — because androguard's plain call graph has no edge
-# modeling FragmentManager-mediated instantiation. See PROGRESS.md KNOWN
-# ISSUES for the root-cause writeup. Matched as a substring against the
-# superclass chain, so both android.app.* and androidx.* variants match.
+# Framework base classes that have lifecycle callbacks but are never declared
+# in the manifest, because an Activity or a FragmentManager hosts them. A
+# manifest-only entry-point search misses every method of these classes.
+# Markers are matched as substrings of the superclass chain, so both
+# android.app.* and androidx.* variants are covered.
 LIFECYCLE_BASE_CLASS_MARKERS = (
     "/Fragment;", "/DialogFragment;", "/ListFragment;", "/PreferenceFragment;",
     "/AsyncTask;", "/IntentService;", "/Worker;", "/ListenableWorker;",
     "/ViewModel;", "$Adapter;", "/RecyclerView$Adapter;",
 )
 
+# Lambda and anonymous-class names, e.g. Foo$$ExternalSyntheticLambda0 or Foo$1.
+_LISTENER_CLASS_PATTERN = re.compile(r"\$\$ExternalSyntheticLambda\d+;$|\$\d+;$")
 
-def _superclass_chain(dx, classname: str, max_depth: int = 25) -> list[str]:
-    chain = []
+
+@dataclass(frozen=True)
+class Component:
+    classname: str  # smali form, e.g. 'Lcom/example/Main;'
+    kind: str  # activity | service | receiver | provider
+    exported: bool
+
+
+def load_apk(apk_path: str):
+    """Returns androguard's (APK, list of DalvikVMFormat, Analysis) triple."""
+    logging.getLogger("androguard").setLevel(logging.CRITICAL)
+    apk, dex_files, analysis = AnalyzeAPK(apk_path)
+    return apk, dex_files, analysis
+
+
+def build_call_graph(analysis) -> nx.DiGraph:
+    return analysis.get_call_graph()
+
+
+def add_callback_dispatch_edges(call_graph: nx.DiGraph) -> int:
+    """Connects listener construction sites to the listener's callback methods.
+
+    The plain call graph has an edge to a lambda's or anonymous listener's
+    `<init>`, but none from there to the callback (`onClick`, `run`, ...). The
+    framework makes that call after the listener is registered, so no invoke
+    instruction links the two. For every caller of such an `<init>`, this adds
+    an edge to each other method of the same class.
+
+    The heuristic favors soundness over completeness: a listener that is built
+    but never registered still gets connected. Returns the number of edges added.
+    """
+    methods_by_class: dict[str, list] = {}
+    for node, data in call_graph.nodes(data=True):
+        methods_by_class.setdefault(data.get("classname", ""), []).append(node)
+
+    added = 0
+    for node, data in list(call_graph.nodes(data=True)):
+        if data.get("methodname") != "<init>":
+            continue
+        classname = data.get("classname", "")
+        if not _LISTENER_CLASS_PATTERN.search(classname):
+            continue
+        callers = list(call_graph.predecessors(node))
+        callbacks = [m for m in methods_by_class.get(classname, []) if m != node]
+        for caller in callers:
+            for callback in callbacks:
+                if not call_graph.has_edge(caller, callback):
+                    call_graph.add_edge(caller, callback, synthetic=True)
+                    added += 1
+    return added
+
+
+def _exported_map(apk, tag: str) -> dict[str, bool]:
+    """Maps each component name declared under `tag` to its exported flag."""
+    manifest = apk.get_android_manifest_xml()
+    exported_by_name: dict[str, bool] = {}
+    if manifest is None:
+        return exported_by_name
+    for element in manifest.findall(f".//{tag}"):
+        name = element.get(f"{ANDROID_NS}name")
+        if name is None:
+            continue
+        exported_attr = element.get(f"{ANDROID_NS}exported")
+        if exported_attr is not None:
+            exported = exported_attr == "true"
+        else:
+            # Without the attribute, a component is exported only if it has an
+            # intent filter (the behavior before Android 12).
+            exported = element.find("intent-filter") is not None
+        exported_by_name[name] = exported
+    return exported_by_name
+
+
+def _to_smali_classname(package: str, manifest_name: str) -> str:
+    """Converts a manifest name ('.Main', 'Main' or 'com.foo.Main') to 'Lcom/foo/Main;'."""
+    if manifest_name.startswith("."):
+        qualified = package + manifest_name
+    elif "." not in manifest_name:
+        qualified = package + "." + manifest_name
+    else:
+        qualified = manifest_name
+    return "L" + qualified.replace(".", "/") + ";"
+
+
+def _superclass_chain(analysis, classname: str, max_depth: int = 25) -> list[str]:
+    chain: list[str] = []
     current = classname
     for _ in range(max_depth):
-        ca = dx.classes.get(current)
-        if ca is None:
+        class_analysis = analysis.classes.get(current)
+        if class_analysis is None:
             break
-        superclass = ca.extends
+        superclass = class_analysis.extends
         if not superclass or superclass in chain:
             break
         chain.append(superclass)
@@ -172,28 +147,29 @@ def _superclass_chain(dx, classname: str, max_depth: int = 25) -> list[str]:
     return chain
 
 
-def is_lifecycle_bearing_class(dx, classname: str) -> bool:
-    for ancestor in _superclass_chain(dx, classname):
-        if any(marker in ancestor for marker in LIFECYCLE_BASE_CLASS_MARKERS):
-            return True
-    return False
+def is_lifecycle_bearing_class(analysis, classname: str) -> bool:
+    return any(
+        marker in ancestor
+        for ancestor in _superclass_chain(analysis, classname)
+        for marker in LIFECYCLE_BASE_CLASS_MARKERS
+    )
 
 
-def get_components(a) -> list[Component]:
-    package = a.get_package()
-    components: list[Component] = []
-    tag_kind = [
+def get_components(apk) -> list[Component]:
+    package = apk.get_package()
+    tags_and_kinds = [
         ("activity", "activity"),
         ("activity-alias", "activity"),
         ("service", "service"),
         ("receiver", "receiver"),
         ("provider", "provider"),
     ]
-    for tag, kind in tag_kind:
-        for manifest_name, exported in _exported_map(a, tag).items():
+    components: list[Component] = []
+    for tag, kind in tags_and_kinds:
+        for manifest_name, exported in _exported_map(apk, tag).items():
             components.append(
                 Component(
-                    classname=_to_dex_classname(package, manifest_name),
+                    classname=_to_smali_classname(package, manifest_name),
                     kind=kind,
                     exported=exported,
                 )
@@ -201,50 +177,44 @@ def get_components(a) -> list[Component]:
     return components
 
 
-def get_entry_point_nodes(dx, cg: nx.DiGraph, components: list[Component]) -> dict:
-    """Returns {node: exported_bool} for call-graph nodes that are named like
-    a framework lifecycle callback and belong to either (a) a
-    manifest-declared component class, or (b) a class that (transitively)
-    extends a lifecycle-bearing framework base class not declared in the
-    manifest (Fragment, AsyncTask, ViewModel, RecyclerView.Adapter, ... — see
-    LIFECYCLE_BASE_CLASS_MARKERS). (b) always gets exported=False since it is
-    only reachable once the app is already running, never directly by
-    external IPC. Falls back to marking every method of a class as an entry
-    point if no lifecycle-named method for that class is found in the graph
-    (e.g. inherited, not overridden — still worth treating the class as
-    reachable)."""
+def get_entry_point_nodes(analysis, call_graph: nx.DiGraph,
+                          components: list[Component]) -> dict:
+    """Returns {node: exported} for the call-graph nodes that act as entry points.
+
+    A node qualifies if its method has a lifecycle-callback name and its class is
+    either declared in the manifest or extends a lifecycle base class (see
+    LIFECYCLE_BASE_CLASS_MARKERS). Classes of the second kind are never
+    exported, since they only run once the app is already running. A qualifying
+    class with no callback-named method in the graph (for example, one that
+    inherits its callbacks) has all of its methods treated as entry points.
+    """
     component_by_class = {c.classname: c for c in components}
     entry_nodes: dict = {}
-    classes_with_named_hit: set[str] = set()
-    lifecycle_class_cache: dict[str, bool] = {}
+    classes_with_callback: set[str] = set()
+    lifecycle_cache: dict[str, bool] = {}
 
-    def is_entry_class(classname: str) -> tuple[bool, bool]:
+    def entry_class_info(classname: str) -> tuple[bool, bool]:
         """Returns (is_entry_class, exported)."""
-        comp = component_by_class.get(classname)
-        if comp is not None:
-            return True, comp.exported
-        cached = lifecycle_class_cache.get(classname)
-        if cached is None:
-            cached = is_lifecycle_bearing_class(dx, classname)
-            lifecycle_class_cache[classname] = cached
-        return cached, False
+        component = component_by_class.get(classname)
+        if component is not None:
+            return True, component.exported
+        if classname not in lifecycle_cache:
+            lifecycle_cache[classname] = is_lifecycle_bearing_class(analysis, classname)
+        return lifecycle_cache[classname], False
 
-    for node, data in cg.nodes(data=True):
+    for node, data in call_graph.nodes(data=True):
         classname = data.get("classname")
-        is_entry, exported = is_entry_class(classname)
-        if not is_entry:
-            continue
-        if data.get("methodname") in ENTRY_POINT_METHOD_NAMES:
+        is_entry, exported = entry_class_info(classname)
+        if is_entry and data.get("methodname") in ENTRY_POINT_METHOD_NAMES:
             entry_nodes[node] = exported
-            classes_with_named_hit.add(classname)
+            classes_with_callback.add(classname)
 
-    for node, data in cg.nodes(data=True):
+    for node, data in call_graph.nodes(data=True):
         classname = data.get("classname")
-        if classname in classes_with_named_hit:
+        if classname in classes_with_callback:
             continue
-        is_entry, exported = is_entry_class(classname)
-        if not is_entry:
-            continue
-        entry_nodes[node] = exported
+        is_entry, exported = entry_class_info(classname)
+        if is_entry:
+            entry_nodes[node] = exported
 
     return entry_nodes

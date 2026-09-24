@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** In-memory audit sink. It has no I/O, IPC, or network of its own — it
+/** In-memory audit sink. It has no I/O, IPC, or network of its own; it
  * only records that a scenario method ran, it does not implement any
  * sensitive behavior itself. */
 public final class EvidenceRecorder {

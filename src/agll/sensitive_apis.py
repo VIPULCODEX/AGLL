@@ -1,21 +1,12 @@
-"""
-Curated list of sensitive Android API sinks used for Objective 1's structural
-suspicion scoring (see Three-Objective-Workflow.md, Objective 1, stage one:
-"reachability from a sensitive API").
+"""Sensitive Android API patterns used by the Stage 1 score.
 
-There is no sink list published in the MalLoc or RAML repos to reuse (checked:
-`grep -rniE "sensitive_api|SENSITIVE_API" MalLoc/1_Code/*.py` finds nothing —
-MalLoc drives its two-phase LLM prompts entirely off natural-language behavior
-descriptions in `1_Code/config.py`, not a static sink list). This list is
-therefore original to AGLL, hand-curated against Android's own permission
-categories and MalLoc's own behavior taxonomy (SMS/Call Abuse, Privacy
-Stealing, Aggressive Advertising, Tricky Behavior/hiding), so results are at
-least checkable against the demo app's ground truth. It is NOT validated
-against a labelled dataset yet — see PROGRESS.md sub-objective 1.1 status.
+The list is hand-curated from Android's permission categories and from the
+behavior taxonomy in MalLoc's prompts (SMS and call abuse, privacy stealing,
+aggressive advertising, tricky behavior). It has not been validated against a
+labeled dataset.
 
-Matching is substring-based against the fully-qualified
-`Lclass/name;->methodName` form androguard exposes via
-`method.get_class_name() + "->" + method.get_name()`.
+A method is sensitive if its full name, `Lclass/Name;->methodName`, contains
+any pattern below as a substring.
 """
 
 SENSITIVE_APIS: dict[str, list[str]] = {

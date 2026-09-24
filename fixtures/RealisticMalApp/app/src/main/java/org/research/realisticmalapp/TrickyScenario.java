@@ -6,10 +6,10 @@ import android.content.pm.PackageManager;
 import android.provider.Settings;
 
 /** Behavior 11 (Tricky Behavior). Real launcher-icon hiding via
- * PackageManager (a self-component only — this app never touches another
+ * PackageManager (a self-component only; this app never touches another
  * app's component, which would need a system permission it does not have)
  * and a real device-identifier read (ANDROID_ID needs no dangerous
- * permission). See ../METHODOLOGY.md. */
+ * permission). See fixtures/README.md. */
 public final class TrickyScenario {
 
     public void hideAppIcon(Context context) {

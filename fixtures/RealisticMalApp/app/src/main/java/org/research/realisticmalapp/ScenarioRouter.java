@@ -4,11 +4,11 @@ import android.content.Context;
 
 /**
  * Callback wiring is intentionally present to exercise call-graph narrowing
- * (specifically the constructor-to-run() / lambda-dispatch edge case — see
- * ../../AGLL/PROGRESS.md KNOWN ISSUES on callback-dispatch heuristics).
+ * (specifically the constructor-to-run() / lambda-dispatch edge case that
+ * add_callback_dispatch_edges in src/agll/callgraph.py handles).
  * Invokes callbacks synchronously; Android framework registration (e.g. a
- * real click listener) is deliberately absent, matching
- * ../../SyntheticMalApp's convention.
+ * real click listener) is deliberately absent, as in the
+ * SyntheticMalApp fixture.
  */
 public final class ScenarioRouter {
     public void registerCallbacks(final Context context) {

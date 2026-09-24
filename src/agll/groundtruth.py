@@ -1,9 +1,8 @@
-"""Parses MalLoc's ground-truth JSON format (see
-MalLoc/0_Data/APKs/MalApp_1_9_11_groundtruth.json) into (classname,
-methodname, descriptor) triples comparable against AGLL's own MethodScore
-records, for smoke-testing stage one against the one demo app this
-environment has labels for. This is NOT the labelled MalRadar dataset
-sub-objective 1.1 calls for — see PROGRESS.md."""
+"""Loader for ground-truth files in MalLoc's JSON format.
+
+Each entry is turned into a (classname, methodname, descriptor) record that can
+be compared directly with the records produced by `suspicion.MethodScore`.
+"""
 
 from __future__ import annotations
 
@@ -11,7 +10,7 @@ import json
 import re
 from dataclasses import dataclass
 
-_SIG_RE = re.compile(
+_SIGNATURE_PATTERN = re.compile(
     r"\.method\s+(?:(?:public|private|protected|static|final|synthetic|"
     r"bridge|abstract|native|synchronized|declared-synchronized|"
     r"constructor|varargs)\s+)*([\w$-]+)\(([^)]*)\)(.+)$"
@@ -27,12 +26,13 @@ class GTMethod:
     behavior_name: str
 
 
-def _parse_signature(sig: str) -> tuple[str, str] | None:
-    m = _SIG_RE.search(sig.strip())
-    if not m:
+def _parse_signature(signature: str) -> tuple[str, str] | None:
+    """Splits a smali '.method' line into (method name, descriptor)."""
+    match = _SIGNATURE_PATTERN.search(signature.strip())
+    if not match:
         return None
-    name, params, ret = m.groups()
-    return name, f"({params}){ret}"
+    name, params, return_type = match.groups()
+    return name, f"({params}){return_type}"
 
 
 def load_groundtruth(path: str) -> list[GTMethod]:
@@ -49,8 +49,8 @@ def load_groundtruth(path: str) -> list[GTMethod]:
         if "method_groups" in behavior:
             method_lists.extend(behavior["method_groups"])
 
-        for methods_list in method_lists:
-            for entry in methods_list:
+        for entries in method_lists:
+            for entry in entries:
                 parsed = _parse_signature(entry["signature"])
                 if parsed is None:
                     raise ValueError(f"Could not parse signature: {entry['signature']!r}")

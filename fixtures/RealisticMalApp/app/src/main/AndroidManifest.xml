@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Controlled fixture (see ../METHODOLOGY.md). Uses REAL Android sensitive
-  APIs (unlike ../../SyntheticMalApp, which is deliberately inert) so static
+  Controlled fixture (see fixtures/README.md). Uses real Android sensitive
+  APIs (unlike the SyntheticMalApp fixture, which is deliberately inert) so static
   narrowing/interpretation pipelines have genuine structural and semantic
   signal to key off. Deliberately excludes the same high-severity capability
-  set ../../SyntheticMalApp/verify_manifest.py forbids (see that file and
-  ../verify_manifest.py for the exact list) - this app can read on-device
+  set SyntheticMalApp/verify_manifest.py forbids (see that file and
+  verify_manifest.py in this folder for the exact list). This app can read on-device
   location/contacts/call-log/telephony-ID data and write to its own private
   storage; it cannot message anyone, exfiltrate anything over a network, or
   control the UI/other apps via an accessibility service.

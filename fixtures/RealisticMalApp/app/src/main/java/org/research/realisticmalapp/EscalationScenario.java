@@ -9,9 +9,9 @@ import java.io.IOException;
 /** Behavior 7 (Privilege Escalation), reinterpreted with real but harmless
  * APIs: a root-check pattern ("Root checking" from MalLoc's own behavior-7
  * "Look for" cues) and a write to the app's OWN private storage ("system
- * file operations" — this never touches a real system path or another
+ * file operations"; this never touches a real system path or another
  * app's data; `openFileOutput` is sandboxed to this app by the OS). See
- * ../METHODOLOGY.md. */
+ * fixtures/README.md. */
 public final class EscalationScenario {
 
     public void probeSystemPaths() {

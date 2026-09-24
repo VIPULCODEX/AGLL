@@ -14,3 +14,9 @@ Neither upstream repository ships an explicit license file as of this
 writing. Obtain MalLoc's and RAML's own code directly from their
 repositories above under whatever terms their authors provide, rather than
 from this repository.
+
+Directory and file names under malloc/ were changed after the runs so that
+they follow one pattern (malapp_1_9_11, synthetic_malapp, realistic_malapp) and
+so that no file name contains a colon, which Windows does not allow. File
+contents were not modified. For the synthetic app, ":" in the model tag of
+llm_interaction_*.json became "_".

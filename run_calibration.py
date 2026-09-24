@@ -1,5 +1,17 @@
+#!/usr/bin/env python3
+"""Compute the four confidence signals for every Stage 2 verdict and fit the fusion model.
 
-import argparse
+Run from the repository root; paths in APPS are relative to it. The script is
+resumable: signals already stored in results/calibration_detail.json are reused,
+so an interrupted run continues where it stopped. With all signals present it
+only refits the model, which needs no LLM.
+
+Phases:
+  1. self-consistency (k extra samples from the primary model) and c_pa,
+  2. ensemble agreement from a second, smaller model,
+  3. fusion: logistic fit, ECE, and the Elkan threshold sweep.
+"""
+
 import json
 import sys
 import time
@@ -9,204 +21,227 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 from agll import calibration, llm_interpret  # noqa: E402
 
 RESULTS_DIR = Path(__file__).parent / "results"
+DETAIL_PATH = RESULTS_DIR / "calibration_detail.json"
 
+# The ground-truth and smali paths point into a MalLoc checkout placed next to
+# this repository (see README).
 APPS = [
     dict(name="MalApp_1_9_11",
-         scores="results/sample_gpu7b_stage1_scores.json",
+         scores="results/malapp_stage1_scores.json",
          gt="../MalLoc/0_Data/APKs/MalApp_1_9_11_groundtruth.json",
          smali="../MalLoc/0_Data/Validation/MalApp_1_9_11",
          top_pct=0.05, behavior_ids=[1, 9, 11],
-         interactions="results/sample_gpu7b_stage2_llm_interactions.json"),
+         interactions="results/malapp_stage2_interactions.json"),
     dict(name="SyntheticMalApp",
          scores="results/synthetic_stage1_scores.json",
          gt="../MalLoc/0_Data/APKs/SyntheticMalApp_groundtruth.json",
          smali="../MalLoc/0_Data/APKs/SyntheticMalApp_decompiled",
          top_pct=1.0, behavior_ids=[1, 2, 6, 11],
-         interactions="results/synthetic_gpu7b_stage2_llm_interactions_fixedbehaviors.json"),
+         interactions="results/synthetic_stage2_interactions.json"),
     dict(name="RealisticMalApp",
          scores="results/realistic_stage1_scores.json",
          gt="../MalLoc/0_Data/APKs/RealisticMalApp_groundtruth.json",
          smali="../MalLoc/0_Data/APKs/RealisticMalApp_decompiled",
          top_pct=0.50, behavior_ids=[1, 2, 7, 11],
-         interactions="results/realistic_gpu7b_stage2_llm_interactions.json"),
+         interactions="results/realistic_stage2_interactions.json"),
 ]
 
-SELF_CONSISTENCY_K = 2
-SELF_CONSISTENCY_TEMP = 0.7
+PRIMARY_MODEL = "qwen2.5-coder:7b-instruct-q4_K_M"
 SECONDARY_MODEL = "qwen2.5:1.5b"
+SELF_CONSISTENCY_K = 2
+SELF_CONSISTENCY_TEMPERATURE = 0.7
+COST_RATIOS = [(1, 1), (2, 1), (5, 1), (10, 1), (20, 1)]  # (C_FA, C_FR)
+
 
 def load_candidates_with_bodies(scores_path, smali_root, top_pct):
-    cands = llm_interpret.load_candidates(Path(scores_path), top_pct=top_pct)
-    for c in cands:
-        f = llm_interpret.locate_class_file(Path(smali_root), c.classname)
-        c.smali_file = str(f) if f else None
-        if f:
-            c.method_body = llm_interpret.extract_method_body(
-                f.read_text(encoding="utf-8", errors="replace"), c.methodname, c.descriptor)
-    return cands
+    candidates = llm_interpret.load_candidates(Path(scores_path), top_pct=top_pct)
+    for candidate in candidates:
+        smali_path = llm_interpret.locate_class_file(Path(smali_root), candidate.classname)
+        candidate.smali_file = str(smali_path) if smali_path else None
+        if smali_path:
+            smali_text = smali_path.read_text(encoding="utf-8", errors="replace")
+            candidate.method_body = llm_interpret.extract_method_body(
+                smali_text, candidate.methodname, candidate.descriptor)
+    return candidates
 
-def main():
-    client_primary = llm_interpret.OllamaClient(model="qwen2.5-coder:7b-instruct-q4_K_M", timeout=120)
-    client_secondary = llm_interpret.OllamaClient(model=SECONDARY_MODEL, timeout=90)
 
-    # First pass: self-consistency (primary model)
-    detail = []
-    if (RESULTS_DIR / "calibration_detail.json").is_file():
-        with open(RESULTS_DIR / "calibration_detail.json") as f:
-            detail = json.load(f)
+def collect_eligible_candidates():
+    """Returns (app, candidate, primary verdict, in_gt, predicted_malicious, correct) tuples.
 
-    done_sc = {(d["app"], d["rank"]): d for d in detail if "c_sc" in d}
-    
-    t_start = time.time()
-    
-    all_eligible = []
-    
+    A candidate is eligible if it has a method body and a parseable Stage 2 verdict.
+    """
+    eligible = []
     for app in APPS:
-        cands = load_candidates_with_bodies(app["scores"], app["smali"], app["top_pct"])
-        gt = llm_interpret.load_groundtruth(Path(app["gt"]))
+        candidates = load_candidates_with_bodies(app["scores"], app["smali"], app["top_pct"])
+        ground_truth = llm_interpret.load_groundtruth(Path(app["gt"]))
         with open(app["interactions"]) as f:
             interactions = {i["rank"]: i for i in json.load(f)}
 
-        for c in cands:
-            if not c.method_body: continue
-            inter = interactions.get(c.rank)
-            if not inter or inter.get("error") or not inter.get("raw_response"): continue
-            primary = llm_interpret.parse_verdict(inter["raw_response"])
-            if not primary["is_parseable"]: continue
-            
-            is_gt = (c.classname, c.methodname, c.descriptor) in gt
+        for candidate in candidates:
+            if not candidate.method_body:
+                continue
+            interaction = interactions.get(candidate.rank)
+            if not interaction or interaction.get("error") or not interaction.get("raw_response"):
+                continue
+            primary = llm_interpret.parse_verdict(interaction["raw_response"])
+            if not primary["is_parseable"]:
+                continue
+            in_gt = (candidate.classname, candidate.methodname, candidate.descriptor) in ground_truth
             predicted_malicious = primary["is_malicious"]
-            correct = 1 if predicted_malicious == is_gt else 0
-            all_eligible.append((app, c, primary, is_gt, predicted_malicious, correct))
+            correct = 1 if predicted_malicious == in_gt else 0
+            eligible.append((app, candidate, primary, in_gt, predicted_malicious, correct))
+    return eligible
 
-    print(f"Total {len(all_eligible)} eligible candidates across apps.")
-    
-    print("--- Phase 1: Self Consistency (Primary Model) ---")
-    new_detail = []
-    for app, c, primary, is_gt, predicted_malicious, correct in all_eligible:
-        key = (app["name"], c.rank)
-        if key in done_sc and "c_sc" in done_sc[key] and "sub_verdicts" in done_sc[key]:
-            d = done_sc[key]
-            new_detail.append(d)
+
+def save_detail(detail) -> None:
+    with open(DETAIL_PATH, "w") as f:
+        json.dump(detail, f, indent=2)
+
+
+def find_detail(detail, app_name, rank):
+    return next(d for d in detail if d["app"] == app_name and d["rank"] == rank)
+
+
+def run_self_consistency(eligible, previous):
+    """Phase 1: returns one detail record per eligible candidate."""
+    client = llm_interpret.OllamaClient(model=PRIMARY_MODEL, timeout=120)
+    done = {(d["app"], d["rank"]): d for d in previous if "c_sc" in d and "sub_verdicts" in d}
+    detail = []
+    for app, candidate, primary, in_gt, predicted_malicious, correct in eligible:
+        key = (app["name"], candidate.rank)
+        if key in done:
+            detail.append(done[key])
             continue
-            
-        t0 = time.time()
+
+        started = time.time()
         try:
             c_sc, sub_verdicts = calibration.self_consistency(
-                client_primary, c, app["behavior_ids"], predicted_malicious,
-                k=SELF_CONSISTENCY_K, temperature=SELF_CONSISTENCY_TEMP)
-        except Exception as e:
-            print(f"    [SC Timeout/Error] {e}")
+                client, candidate, app["behavior_ids"], predicted_malicious,
+                k=SELF_CONSISTENCY_K, temperature=SELF_CONSISTENCY_TEMPERATURE)
+        except Exception as error:
+            print(f"    self-consistency call failed: {error}")
             c_sc, sub_verdicts = 0.0, [{"is_parseable": False, "is_malicious": False}]
+        print(f"{app['name']} rank {candidate.rank:3d} c_sc={c_sc:.2f} "
+              f"({time.time() - started:.1f}s)", flush=True)
 
-        elapsed = time.time() - t0
-        print(f"{app['name']} rank {c.rank:3d} c_sc={c_sc:.2f} ({elapsed:.1f}s)", flush=True)
-        
-        d = {
-            "app": app["name"], "rank": c.rank, "signature": c.signature,
-            "predicted_malicious": predicted_malicious, "in_gt": is_gt, "correct": correct,
+        detail.append({
+            "app": app["name"], "rank": candidate.rank, "signature": candidate.signature,
+            "predicted_malicious": predicted_malicious, "in_gt": in_gt, "correct": correct,
             "c_sc": round(c_sc, 4), "sub_verdicts": sub_verdicts,
-            "c_pa": round(calibration.program_analysis_consistency(c, primary), 4)
-        }
-        new_detail.append(d)
-        with open(RESULTS_DIR / "calibration_detail.json", "w") as f:
-            json.dump(new_detail, f, indent=2)
-            
-    print("--- Phase 2: Ensemble (Secondary Model) ---")
-    done_ens = {(d["app"], d["rank"]): d for d in new_detail
-                if "c_ens" in d or d.get("c_ens_unavailable")}
-    for app, c, primary, is_gt, predicted_malicious, correct in all_eligible:
-        key = (app["name"], c.rank)
-        if key in done_ens:
+            "c_pa": round(calibration.program_analysis_consistency(candidate, primary), 4),
+        })
+        save_detail(detail)
+    return detail
+
+
+def run_ensemble(eligible, detail):
+    """Phase 2: adds c_ens to each record; a failed call is marked unavailable."""
+    client = llm_interpret.OllamaClient(model=SECONDARY_MODEL, timeout=90)
+    done = {(d["app"], d["rank"]) for d in detail if "c_ens" in d or d.get("c_ens_unavailable")}
+    for app, candidate, _, _, predicted_malicious, _ in eligible:
+        if (app["name"], candidate.rank) in done:
             continue
 
-        t0 = time.time()
+        started = time.time()
+        record = find_detail(detail, app["name"], candidate.rank)
         try:
-            c_ens, ens_verdict = calibration.ensemble_disagreement(
-                client_secondary, c, app["behavior_ids"], predicted_malicious)
-            elapsed = time.time() - t0
-            print(f"{app['name']} rank {c.rank:3d} c_ens={c_ens:.2f} ({elapsed:.1f}s)", flush=True)
-            for d in new_detail:
-                if d["app"] == app["name"] and d["rank"] == c.rank:
-                    d["c_ens"] = round(c_ens, 4)
-                    d["ensemble_verdict"] = ens_verdict.get("is_malicious")
-                    break
-        except Exception as e:
-            elapsed = time.time() - t0
-            print(f"{app['name']} rank {c.rank:3d} c_ens FAILED ({type(e).__name__}) "
-                  f"after {elapsed:.1f}s - marking unavailable, continuing", flush=True)
-            for d in new_detail:
-                if d["app"] == app["name"] and d["rank"] == c.rank:
-                    d["c_ens_unavailable"] = True
-                    d["c_ens_error"] = f"{type(e).__name__}: {e}"
-                    break
-        with open(RESULTS_DIR / "calibration_detail.json", "w") as f:
-            json.dump(new_detail, f, indent=2)
-            
-    print("--- Phase 3: Final signal fusion ---")
-    all_features = []
-    excluded_unavailable = []
-    for app, c, primary, is_gt, predicted_malicious, correct in all_eligible:
-        d = [d for d in new_detail if d["app"] == app["name"] and d["rank"] == c.rank][0]
-        if "c_ens" not in d:
-            # Ensemble call never succeeded (marked c_ens_unavailable in Phase 2) -
-            # excluded from the fitted/reported set rather than imputed, so the
-            # calibration numbers reflect only candidates where all 4 real signals
-            # were actually computed. Recorded, not silently dropped.
-            excluded_unavailable.append(d["signature"])
+            c_ens, verdict = calibration.ensemble_disagreement(
+                client, candidate, app["behavior_ids"], predicted_malicious)
+            print(f"{app['name']} rank {candidate.rank:3d} c_ens={c_ens:.2f} "
+                  f"({time.time() - started:.1f}s)", flush=True)
+            record["c_ens"] = round(c_ens, 4)
+            record["ensemble_verdict"] = verdict.get("is_malicious")
+        except Exception as error:
+            print(f"{app['name']} rank {candidate.rank:3d} c_ens failed "
+                  f"({type(error).__name__}) after {time.time() - started:.1f}s; "
+                  f"marked unavailable", flush=True)
+            record["c_ens_unavailable"] = True
+            record["c_ens_error"] = f"{type(error).__name__}: {error}"
+        save_detail(detail)
+
+
+def build_features(eligible, detail):
+    """Phase 3a: entropy signals and feature records for candidates with all four signals."""
+    features = []
+    excluded = []
+    for app, candidate, primary, _, _, _ in eligible:
+        record = find_detail(detail, app["name"], candidate.rank)
+        if "c_ens" not in record:
+            # No ensemble result: leave the candidate out rather than impute it.
+            excluded.append(record["signature"])
             continue
-        h_sem, h_max = calibration.semantic_entropy([primary] + d["sub_verdicts"])
-        d["h_sem"] = round(h_sem, 4)
-        d["h_max"] = round(h_max, 4)
+        h_sem, h_max = calibration.semantic_entropy([primary] + record["sub_verdicts"])
+        record["h_sem"] = round(h_sem, 4)
+        record["h_max"] = round(h_max, 4)
+        features.append(calibration.CalibrationFeatures(
+            signature=record["signature"], app=record["app"], c_sc=record["c_sc"],
+            h_sem=record["h_sem"], h_max=record["h_max"], c_ens=record["c_ens"],
+            c_pa=record["c_pa"], predicted_malicious=record["predicted_malicious"],
+            in_gt=record["in_gt"], correct=record["correct"]))
+    return features, excluded
 
-        feat = calibration.CalibrationFeatures(
-            signature=d["signature"], app=d["app"], c_sc=d["c_sc"], h_sem=d["h_sem"], h_max=d["h_max"],
-            c_ens=d["c_ens"], c_pa=d["c_pa"], predicted_malicious=d["predicted_malicious"],
-            in_gt=d["in_gt"], correct=d["correct"]
-        )
-        all_features.append(feat)
 
-    if excluded_unavailable:
-        print(f"\nExcluded {len(excluded_unavailable)} candidate(s) with a failed "
-              f"ensemble call (c_ens unavailable) from the fitted set:")
-        for sig in excluded_unavailable:
-            print(f"  - {sig}")
+def fit_and_report(features, detail) -> None:
+    n_correct = sum(f.correct for f in features)
+    print(f"Label balance: {n_correct}/{len(features)} correct")
 
-    total_elapsed = time.time() - t_start
-    print(f"\nAll signals computed in {total_elapsed/60:.1f} min.")
-
-    n_correct = sum(f.correct for f in all_features)
-    print(f"Label balance: {n_correct}/{len(all_features)} correct")
-
-    if len(set(f.correct for f in all_features)) < 2:
+    if len({f.correct for f in features}) < 2:
         with open(RESULTS_DIR / "calibration_results.json", "w") as f:
-            json.dump({"fit": None, "detail": new_detail}, f, indent=2)
+            json.dump({"fit": None, "detail": detail}, f, indent=2)
         return
 
-    weights, clf = calibration.fit_logistic(all_features)
-    print(f"\nFitted logistic weights (w0..w4): w0={weights[0]:.4f} w1={weights[1]:.4f} w2={weights[2]:.4f} w3={weights[3]:.4f} w4={weights[4]:.4f}")
+    weights, _ = calibration.fit_logistic(features)
+    print("\nFitted logistic weights: " + " ".join(f"w{i}={w:.4f}" for i, w in enumerate(weights)))
 
-    pairs = [(calibration.calibrated_confidence(f, weights), f.correct) for f in all_features]
+    pairs = [(calibration.calibrated_confidence(f, weights), f.correct) for f in features]
     ece = calibration.expected_calibration_error(pairs, n_bins=5)
-    print(f"Expected Calibration Error: {ece:.4f}")
+    print(f"Expected calibration error (5 bins): {ece:.4f}")
 
     sweep = []
-    for c_fa, c_fr in [(1, 1), (2, 1), (5, 1), (10, 1), (20, 1)]:
-        tau = calibration.elkan_threshold(c_fa, c_fr)
+    for cost_fa, cost_fr in COST_RATIOS:
+        tau = calibration.elkan_threshold(cost_fa, cost_fr)
         accepted = [(p, y) for p, y in pairs if p >= tau]
         coverage = len(accepted) / len(pairs)
-        acc = (sum(y for _, y in accepted) / len(accepted)) if accepted else float("nan")
-        sweep.append({"c_fa": c_fa, "c_fr": c_fr, "tau": tau, "coverage": coverage, "accuracy_among_accepted": acc})
-        print(f"C_FA:{c_fa} C_FR:{c_fr} tau*={tau:.3f} cov={coverage:.3f} acc={acc:.3f}")
+        accuracy = sum(y for _, y in accepted) / len(accepted) if accepted else float("nan")
+        sweep.append({"c_fa": cost_fa, "c_fr": cost_fr, "tau": tau,
+                      "coverage": coverage, "accuracy_among_accepted": accuracy})
+        print(f"C_FA:{cost_fa} C_FR:{cost_fr} tau*={tau:.3f} cov={coverage:.3f} acc={accuracy:.3f}")
 
-    out = {
-        "n_candidates": len(all_features), "n_correct": n_correct,
-        "weights": {"w0": weights[0], "w1_c_sc": weights[1], "w2_c_sem": weights[2], "w3_c_ens": weights[3], "w4_c_pa": weights[4]},
+    summary = {
+        "n_candidates": len(features), "n_correct": n_correct,
+        "weights": {"w0": weights[0], "w1_c_sc": weights[1], "w2_c_sem": weights[2],
+                    "w3_c_ens": weights[3], "w4_c_pa": weights[4]},
         "ece_5bin": ece, "elkan_sweep": sweep,
     }
     with open(RESULTS_DIR / "calibration_results.json", "w") as f:
-        json.dump({"summary": out, "detail": new_detail}, f, indent=2)
+        json.dump({"summary": summary, "detail": detail}, f, indent=2)
+
+
+def main():
+    started = time.time()
+    previous = []
+    if DETAIL_PATH.is_file():
+        with open(DETAIL_PATH) as f:
+            previous = json.load(f)
+
+    eligible = collect_eligible_candidates()
+    print(f"{len(eligible)} eligible candidates across all apps.")
+
+    print("--- Phase 1: self-consistency (primary model) ---")
+    detail = run_self_consistency(eligible, previous)
+    print("--- Phase 2: ensemble agreement (secondary model) ---")
+    run_ensemble(eligible, detail)
+
+    print("--- Phase 3: signal fusion ---")
+    features, excluded = build_features(eligible, detail)
+    if excluded:
+        print(f"\nExcluded {len(excluded)} candidate(s) without an ensemble result:")
+        for signature in excluded:
+            print(f"  - {signature}")
+    print(f"\nAll signals computed in {(time.time() - started) / 60:.1f} min.")
+    fit_and_report(features, detail)
     print("Done")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

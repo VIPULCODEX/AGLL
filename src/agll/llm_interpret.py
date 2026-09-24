@@ -1,40 +1,14 @@
-"""
-Stage-three: LLM interpretation of the structural candidate set (sub-objective
-1.2). Input is the top-`pct`-of-rank candidates produced by stage one
-(`suspicion.py` / `run_smoke_test.py`); for each candidate alone, the LLM
-decides whether the method implements one of the three malicious behaviors
-this app is ground-truthed against. "LLM only interprets what analysis
-surfaces" — the LLM is never asked to propose methods outside the candidate
-list, and is told so explicitly.
+"""Stage 2 and Stage 3: LLM interpretation of the shortlist and grounding check.
 
-Everything here deliberately mirrors the conditions of the MalLoc baseline runs
-(nnMalLoc/1_Code/ProgressiveAnalysisUtils.py`) so the end-to-end AGLL number
-is comparable to MalLoc's full-app run (public/MalLoc/PROGRESS.md) on the same
-model (`qwen2.5-coder:7b-instruct-q4_K_M` via Ollama):
+For each candidate from Stage 1 the LLM sees one smali method body and decides
+whether it implements one of the listed malicious behaviors. It is never asked
+to propose methods outside the shortlist. Every verdict must quote the API
+calls it relies on; the grounding check then verifies each quoted reference
+against the method body.
 
-  - same 3 behavior descriptions MalLoc feeds its prompts (copied verbatim
-    from MalLoc/1_Code/config.py, behaviors 1/9/11);
-  - same renderer (Ollama /api/generate) and marker-parseable output format;
-  - raw smali method bodies as the code evidence, extracted from apktool
-    output (MalLoc/0_Data/Validation) rather than androguard's decompiler,
-    so the text handed to the LLM is byte-identical to what the ground-truth
-    signatures were checked against.
-
-The difference from MalLoc is the *gating*: MalLoc handed the LLM whole
-classes (and, in the full-app run, screened all 99 classes); AGLL hands the
-LLM only the structurally-narrowed shortlist, one method at a time. That is the
-point of the comparison.
-
-Anti-hallucination (this is where MalLoc's own reproduction caught a fabricated
-signature — MalLoc/PROGRESS.md section 4.2): every verdict must carry an
-EVIDENCE field quoting verbatim the smali invoke/API lines that justify it, and
-the judge pass re-checks each cited reference against the actual smali text.
-
-Smali method-body extraction is deliberately independent of androguard: the
-structural JSON already pins each candidate to (classname, methodname,
-descriptor), and the apktool tree already has every app class as text. Loading
-androguard a second time (a ~2 minute wall-clock cost) buys nothing for the
-interpretation stage.
+The prompt style, behavior descriptions and Ollama call follow the MalLoc
+baseline so both systems can be compared under the same model. Method bodies
+are read from an apktool tree, which avoids loading androguard a second time.
 """
 
 from __future__ import annotations
@@ -46,14 +20,10 @@ from pathlib import Path
 
 import requests
 
-# --- Behavior descriptions: copied verbatim from MalLoc/1_Code/config.py.
-# --- Source is the MalLoc replication package being reproduced as a baseline
-# --- (Objective 1.3); keeping the text identical makes the two prompt
-# --- conditions comparable. Originally only 1/9/11 (the MalApp_1_9_11 demo
-# --- app's 3 behaviors) were included here; 2 and 6 were added after a judge
-# --- pass caught that SyntheticMalApp's ground truth uses categories
-# --- {1, 2, 6, 11} but the synthetic run's prompt only offered {1, 9, 11} —
-# --- see AGLL/PROGRESS.md JUDGE LOG, "prompt/fixture category mismatch".
+from . import groundtruth
+
+# Behavior descriptions, copied verbatim from MalLoc's config.py so that both
+# systems are prompted with the same text.
 BEHAVIOR_DESCRIPTIONS: dict[int, str] = {
     1: """Privacy Stealing - Methods that access or exfiltrate sensitive user data including:
 (1) - Accessing Contact Lists – Retrieving the user's contact details from the device's storage.
@@ -100,9 +70,7 @@ Example: Maikspy error message pattern
 Look for: Package visibility changes, settings modifications, fake error messages.""",
 }
 
-# MalLoc's own prompt template style (marker lines, no free-form JSON) —
-# see MalLoc/1_Code/ProgressiveAnalysisUtils.py. Kept for comparability and
-# because it is what survived adversarial scrutiny in the baseline runs.
+# Marker-line output format (no JSON), following MalLoc's prompts.
 _SYSTEM_PRELUDE = (
     "You are an expert in Android malware analysis. A static-analysis "
     "pipeline has narrowed an Android app's methods down to a shortlist ranked "
@@ -115,9 +83,7 @@ _SYSTEM_PRELUDE = (
     "without concrete Smali evidence in the method body itself."
 )
 
-# ---------------------------------------------------------------------------
-# Smali extraction (from the apktool tree used by the MalLoc reproduction).
-# ---------------------------------------------------------------------------
+# Smali extraction from an apktool tree
 
 _METHOD_HEADER_RE = re.compile(
     r"\.method\s+(?:(?:public|private|protected|static|final|synthetic|"
@@ -126,14 +92,12 @@ _METHOD_HEADER_RE = re.compile(
 )
 
 
-def _find_smali_root(smali_roots: list[Path]) -> None:
-    pass  # (helper contract only; actual search is in locate_class_file)
-
-
 def locate_class_file(smali_root: Path, dex_classname: str) -> Path | None:
-    """Map a dex class name ('Llu/snt/trux/koopaapp/ui/home/Foo;') to its
-    .smali file under an apktool tree whose roots are `smali`,
-    `smali_classes2`, ... (multi-dex)."""
+    """Finds the .smali file of a class such as 'Lorg/example/Foo;'.
+
+    `smali_root` is an apktool output directory, which holds one `smali*`
+    folder per dex file (`smali`, `smali_classes2`, ...).
+    """
     rel = dex_classname[1:-1].replace(";", "") + ".smali"
     if smali_root.is_dir():
         for sub in smali_root.iterdir():
@@ -145,10 +109,11 @@ def locate_class_file(smali_root: Path, dex_classname: str) -> Path | None:
 
 
 def extract_method_body(smali_text: str, methodname: str, descriptor: str) -> str | None:
-    """Return the full '.method ... .end method' block whose header parses to
-    `methodname` + `descriptor` (descriptor normalized with no whitespace),
-    or None. Handles overloads (later definitions scanned past) and access
-    flags on the header line."""
+    """Returns the '.method ... .end method' block for one method, or None.
+
+    Overloads are told apart by descriptor, and access flags on the header line
+    are ignored.
+    """
     target = methodname + descriptor  # e.g. 'onCreateView(Landroid/view/View;)V'
     lines = smali_text.splitlines()
     i = 0
@@ -175,9 +140,7 @@ def extract_method_body(smali_text: str, methodname: str, descriptor: str) -> st
     return None
 
 
-# ---------------------------------------------------------------------------
-# Prompt construction + LLM call (Ollama, same renderer MalLoc used).
-# ---------------------------------------------------------------------------
+# Prompt construction
 
 @dataclass
 class Candidate:
@@ -191,7 +154,7 @@ class Candidate:
     dist_from_entry: float | None
     entry_exported: bool
     cyclomatic_complexity: int | None
-    # populated during the run
+    # Filled in once the smali file has been located.
     smali_file: str | None = None
     method_body: str | None = None
 
@@ -215,40 +178,35 @@ class Candidate:
         )
 
 
-def build_prompt(
-    cand: Candidate,
-    behavior_ids: list[int],
-    activate_body_flag: bool = True,
-) -> str:
-    """One candidate method, its smali body, its structural signals, and the
-    same three behavior descriptions MalLoc prompts with. The candidate's own
-    `.method` header line is used verbatim (matches MalLoc Phase-2's
-    "the first line of the method exactly as it appears in the Smali code"
-    requirement)."""
+def build_prompt(candidate: Candidate, behavior_ids: list[int]) -> str:
+    """Builds the prompt for one candidate.
+
+    It contains the behavior descriptions, the Stage 1 signals as context, and
+    the method body, whose own `.method` header line is reused verbatim.
+    """
     behavior_block = "\n\n".join(
         f"Behavior {b}:\n{BEHAVIOR_DESCRIPTIONS[b]}" for b in behavior_ids
     )
 
-    sig_parts = []
     structural = []
-    if cand.suspicion_score is not None:
-        structural.append(f"suspicion score: {cand.suspicion_score} (rank {cand.rank})")
-    if cand.dist_to_sensitive is not None:
+    if candidate.suspicion_score is not None:
+        structural.append(f"suspicion score: {candidate.suspicion_score} (rank {candidate.rank})")
+    if candidate.dist_to_sensitive is not None:
         structural.append(
-            f"shortest distance to a sensitive API call: {cand.dist_to_sensitive} hop(s)"
-            + (f" (category: {cand.sensitive_category})" if cand.sensitive_category else "")
+            f"shortest distance to a sensitive API call: {candidate.dist_to_sensitive} hop(s)"
+            + (f" (category: {candidate.sensitive_category})" if candidate.sensitive_category else "")
         )
     else:
         structural.append("shortest distance to a sensitive API call: unreachable")
-    if cand.dist_from_entry is not None:
-        exported = ", exported" if cand.entry_exported else ""
-        structural.append(f"distance from an app entry point: {cand.dist_from_entry} hop(s){exported}")
+    if candidate.dist_from_entry is not None:
+        exported = ", exported" if candidate.entry_exported else ""
+        structural.append(f"distance from an app entry point: {candidate.dist_from_entry} hop(s){exported}")
     else:
         structural.append("distance from an app entry point: unknown")
-    if cand.cyclomatic_complexity is not None:
-        structural.append(f"cyclomatic complexity: {cand.cyclomatic_complexity}")
+    if candidate.cyclomatic_complexity is not None:
+        structural.append(f"cyclomatic complexity: {candidate.cyclomatic_complexity}")
 
-    method_line = _first_header_line(cand)
+    method_line = _first_header_line(candidate)
 
     prompt = f"""{_SYSTEM_PRELUDE}
 
@@ -257,14 +215,14 @@ Malicious behaviors (refer only to these; any method not clearly matching one of
 {behavior_block}
 
 Candidate method (under review — decide only on THIS method, not the whole class):
-CLASS: {cand.classname}
+CLASS: {candidate.classname}
 METHOD: {method_line}
 
 Structural signals from the static-analysis stage (context only, not proof of malice):
 {chr(10).join('- ' + s for s in structural)}
 
 Smali body of the candidate method:
-{cand.method_body}
+{candidate.method_body}
 
 IMPORTANT: For your answer, use the following format, nothing else — no markdown, no extra text:
 IS_MALICIOUS: yes or no
@@ -275,33 +233,30 @@ EVIDENCE: quote, verbatim from the Smali body above, the exact API calls or inst
     return prompt
 
 
-def _first_header_line(cand: Candidate) -> str:
-    """Best-effort reconstruction of the .method header line for the prompt,
-    from the extracted body (the real smali header is always preferred; the
-    fallback is a flagless reconstruction)."""
-    if cand.method_body:
-        first = cand.method_body.splitlines()[0].strip()
+def _first_header_line(candidate: Candidate) -> str:
+    """Returns the method's own header line, or a flagless reconstruction."""
+    if candidate.method_body:
+        first = candidate.method_body.splitlines()[0].strip()
         if first.startswith(".method"):
             return first
-    return f".method {cand.methodname}{cand.descriptor}"
+    return f".method {candidate.methodname}{candidate.descriptor}"
 
 
-# ---------------------------------------------------------------------------
-# Ollama client (same pattern as MalLoc/1_Code/LLMUtils.py OllamaInterface).
-# ---------------------------------------------------------------------------
+# Ollama client
 
 class OllamaClient:
-    def __init__(self, base_url: str = "http://localhost:11434", model: str = "qwen2.5-coder:7b-instruct-q4_K_M", timeout: int = 300):
+    def __init__(self, base_url: str = "http://localhost:11434",
+                 model: str = "qwen2.5-coder:7b-instruct-q4_K_M", timeout: int = 300):
         self.base_url = base_url
         self.model = model
         self.timeout = timeout
 
     def generate(self, prompt: str, temperature: float = 0.0) -> str:
-        """/api/generate, stream disabled, temperature pinned to 0 by default
-        for reproducibility (documented in PROGRESS.md — the MalLoc baseline
-        calls were defaults; this difference is called out, not hidden).
-        Objective 2's self-consistency signal (calibration.py) is the one
-        caller that deliberately passes a nonzero temperature."""
+        """Calls /api/generate without streaming.
+
+        Temperature defaults to 0 so runs are repeatable. Only the
+        self-consistency signal in calibration.py passes a higher value.
+        """
         resp = requests.post(
             f"{self.base_url}/api/generate",
             json={"model": self.model, "prompt": prompt, "stream": False,
@@ -312,49 +267,43 @@ class OllamaClient:
         return resp.json().get("response", "")
 
 
-# ---------------------------------------------------------------------------
-# Verdict parsing (marker format, like MalLoc's parse_marker_class_output).
-# ---------------------------------------------------------------------------
+# Verdict parsing
 
 _MAL_RE = re.compile(r"IS_MALICIOUS\s*:\s*(yes|no)", re.IGNORECASE)
 _BEH_RE = re.compile(r"BEHAVIOR_ID\s*:\s*(\d+|none)\b", re.IGNORECASE)
 _CONF_RE = re.compile(r"CONFIDENCE\s*:\s*(\d+)", re.IGNORECASE)
-# Evidence conventionally spans the rest of the response (code fences,
-# bulleted invoke lines, rationale), so DOTALL and capture-to-end.
+# The evidence field runs to the end of the response.
 _EVID_RE = re.compile(r"EVIDENCE\s*:\s*(.*)", re.IGNORECASE | re.DOTALL)
 _REF_RE = re.compile(r"L[\w/$]+;->[\w$]+")
 
 
 def parse_verdict(raw: str) -> dict:
-    """Parse the marker-format response into {is_malicious, behavior_id,
-    confidence, evidence}. Return is_parseable=False for outputs that lack the
-    IS_MALICIOUS marker (these are surfaced to the judge, never silently
-    defaulted)."""
+    """Parses a marker-format response.
+
+    A response without the IS_MALICIOUS marker is returned with
+    is_parseable=False instead of being given a default verdict.
+    """
     malicious_match = _MAL_RE.search(raw)
     if not malicious_match:
         return {"is_parseable": False, "is_malicious": None, "behavior_id": None,
                 "confidence": None, "evidence": None, "raw": raw}
     is_malicious = malicious_match.group(1).strip().lower() == "yes"
-    beh = _BEH_RE.search(raw)
-    conf = _CONF_RE.search(raw)
-    evid = _EVID_RE.search(raw)
-    if evid:
-        # Evidence conventionally spans the rest of the response (code
-        # fences, bulleted invoke lines, rationale) — take the full capture.
-        evidence = evid.group(1).strip()
+    behavior_match = _BEH_RE.search(raw)
+    confidence_match = _CONF_RE.search(raw)
+    evidence_match = _EVID_RE.search(raw)
+    evidence = evidence_match.group(1).strip() if evidence_match else None
     return {
         "is_parseable": True,
         "is_malicious": is_malicious,
-        "behavior_id": beh.group(1).lower() if beh else (None if not is_malicious else "unknown"),
-        "confidence": int(conf.group(1)) if conf and is_malicious else (int(conf.group(1)) if conf else None),
+        "behavior_id": behavior_match.group(1).lower() if behavior_match else (None if not is_malicious else "unknown"),
+        "confidence": int(confidence_match.group(1)) if confidence_match else None,
         "evidence": evidence,
         "raw": raw,
     }
 
 
 def cited_api_refs(text: str | None) -> list[str]:
-    """All class->method references mentioned in a free-text evidence field,
-    for the judge's grounding check."""
+    """Returns the distinct 'Lclass;->method' references in an evidence string, in order."""
     if not text:
         return []
     seen: list[str] = []
@@ -366,19 +315,18 @@ def cited_api_refs(text: str | None) -> list[str]:
     return seen
 
 
-def grounding_check(cand: Candidate, verdict: dict) -> dict:
-    """Adversarial check on a malicious verdict: every class->method reference
-    cited in EVIDENCE must literally appear in the smali body (or, for
-    helper-method references, in the same class file). Any citation that does
-    not appear is flagged as ungrounded — this is exactly where MalLoc's
-    reproduction caught a hallucinated signature (PROGRESS.md sec 4.2)."""
+def grounding_check(candidate: Candidate, verdict: dict) -> dict:
+    """Checks that every API reference cited as evidence appears in the method body.
+
+    A reference that does not appear is reported as ungrounded.
+    """
     refs = cited_api_refs(verdict.get("evidence"))
-    ground = [r for r in refs if r in (cand.method_body or "")]
-    ungrounded = [r for r in refs if r not in ground]
-    # Cross-check: BEHAVIOR_ID must be one of the behaviors if was_grounded
+    body = candidate.method_body or ""
+    grounded = [r for r in refs if r in body]
+    ungrounded = [r for r in refs if r not in grounded]
     return {
         "cited_refs": refs,
-        "grounded_refs": ground,
+        "grounded_refs": grounded,
         "ungrounded_refs": ungrounded,
         "grounded": len(ungrounded) == 0,
         "has_evidence": bool(refs),
@@ -388,16 +336,10 @@ def grounding_check(cand: Candidate, verdict: dict) -> dict:
 def load_candidates(scores_path: str | Path, top_pct: float = 0.05) -> list[Candidate]:
     with open(scores_path) as f:
         rows = json.load(f)
-    n = max(1, round(len(rows) * top_pct))
-    cands = [Candidate.from_scores_row(r) for r in rows[:n]]
-    return cands
+    count = max(1, round(len(rows) * top_pct))
+    return [Candidate.from_scores_row(row) for row in rows[:count]]
 
 
 def load_groundtruth(gt_path: str | Path) -> set[tuple[str, str, str]]:
-    """(classname, methodname, descriptor) triples, mirrored from
-    groundtruth.load_groundtruth but keyed for the judge's FP/TP matching."""
-    import sys
-    from pathlib import Path as _P
-    sys.path.insert(0, str(_P(__file__).resolve().parents[2] / "src"))
-    from . import groundtruth as _gt
-    return {(_g.classname, _g.methodname, _g.descriptor) for _g in _gt.load_groundtruth(gt_path)}
+    """Returns the ground-truth methods as (classname, methodname, descriptor) triples."""
+    return {(m.classname, m.methodname, m.descriptor) for m in groundtruth.load_groundtruth(gt_path)}

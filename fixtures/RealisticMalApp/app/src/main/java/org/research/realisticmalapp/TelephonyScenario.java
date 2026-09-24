@@ -9,9 +9,9 @@ import android.telephony.TelephonyManager;
 /** Behavior 2 (SMS/CALL Abuse), safely reinterpreted: this fixture reads
  * telephony identifiers and the call log ("telephony API usage" and
  * "monitoring call logs" from MalLoc's own behavior-2 "Look for" cues) but
- * never sends, intercepts, or deletes an SMS — no SEND_SMS/READ_SMS/
+ * never sends, intercepts, or deletes an SMS: no SEND_SMS/READ_SMS/
  * RECEIVE_SMS permission is declared anywhere in this app. See
- * ../METHODOLOGY.md. */
+ * fixtures/README.md. */
 public final class TelephonyScenario {
 
     public void harvestPhoneIdentifiers(Context context) {

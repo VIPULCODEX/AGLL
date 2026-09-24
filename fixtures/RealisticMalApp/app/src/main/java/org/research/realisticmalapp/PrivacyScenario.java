@@ -8,8 +8,8 @@ import android.location.LocationManager;
 import android.provider.ContactsContract;
 
 /** Behavior 1 (Privacy Stealing). Real device-location and contacts reads,
- * kept on-device only — this app has no INTERNET permission and never
- * transmits anything anywhere. See ../METHODOLOGY.md. */
+ * kept on-device only; this app has no INTERNET permission and never
+ * transmits anything anywhere. See fixtures/README.md. */
 public final class PrivacyScenario {
 
     public void harvestDeviceLocation(Context context) {

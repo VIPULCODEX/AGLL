@@ -4,10 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-/** Non-exported Service entry point — tests AGLL's entry-point detection
+/** Non-exported Service entry point. It tests AGLL's entry-point detection
  * against a Service lifecycle callback (onStartCommand), reached only via
  * an internal startService() call, not directly by the OS or another app.
- * See ../METHODOLOGY.md. */
+ * See fixtures/README.md. */
 public final class MaintenanceService extends Service {
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
         new TrickyScenario().hideAppIcon(this);
